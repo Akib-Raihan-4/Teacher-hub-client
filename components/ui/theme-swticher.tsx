@@ -32,7 +32,7 @@ export default function ThemeSwitcher() {
       variant="outline"
       size="icon"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg"
+      className="relative cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg"
     >
       <div className="relative h-4 w-4">
         <Sun
