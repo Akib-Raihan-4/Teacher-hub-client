@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
 import ThemeSwitcher from "@/components/ui/theme-swticher";
 import { BookOpen } from "lucide-react";
+import RegisterModal from "./RegisterModal";
 
 export default function Navbar() {
   return (
@@ -13,9 +13,7 @@ export default function Navbar() {
           </div>
           <div className="flex items-center space-x-4">
             <ThemeSwitcher />
-            <Button className="cursor-pointer bg-blue-600 hover:bg-blue-700 dark:bg-yellow-600 dark:hover:bg-yellow-700 px-2 sm:px-6">
-              <span className="dark:text-white">Get Started</span>
-            </Button>
+            <RegisterModal />
           </div>
         </nav>
       </header>
