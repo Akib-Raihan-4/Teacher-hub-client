@@ -5,26 +5,26 @@ import { useEffect } from "react";
 import { useAuthContext } from "../providers/auth-provider";
 import Loader from "@/components/shared/loader/Loader";
 
-interface ProtectedRouteProps {
+interface PublicRouteProps {
   children: React.ReactNode;
   fallback?: React.ReactNode;
 }
 
-export const ProtectedRoute = ({ children, fallback }: ProtectedRouteProps) => {
+export const PublicRoute = ({ children, fallback }: PublicRouteProps) => {
   const { isAuthenticated, isInitialized } = useAuthContext();
   const router = useRouter();
 
   useEffect(() => {
-    if (isInitialized && !isAuthenticated) {
+    if (isInitialized && isAuthenticated) {
       const timeout = setTimeout(() => {
-        router.push("/");
-      }, 2000);
+        router.push("/home");
+      }, 1000);
 
       return () => clearTimeout(timeout);
     }
   }, [isAuthenticated, isInitialized, router]);
 
-  if (!isAuthenticated && isInitialized) {
+  if (isAuthenticated && isInitialized) {
     return fallback || <Loader />;
   }
 

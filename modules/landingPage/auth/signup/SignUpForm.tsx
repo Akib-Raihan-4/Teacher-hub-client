@@ -35,7 +35,7 @@ export default function SignUpForm({
   const onSubmit = async (data: SignUpFormData) => {
     try {
       await registerUser(data as RegisterCredentials);
-      router.push("/dashboard");
+      router.push("/home");
     } catch (err) {
       console.error("Register error:", err);
     }

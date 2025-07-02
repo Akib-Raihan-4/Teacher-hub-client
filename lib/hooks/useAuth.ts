@@ -15,33 +15,40 @@ export const useAuth = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  useEffect(() => {
+  const hasValidToken = () => {
     const token = tokenManager.getToken();
-    if (token && !tokenManager.isTokenExpired(token)) {
-      setIsInitialized(true);
-    } else {
-      setIsInitialized(true);
-    }
-  }, []);
+    return Boolean(token && !tokenManager.isTokenExpired(token));
+  };
 
-  const { data: profileData, isLoading: isProfileLoading } = useQuery({
+  const {
+    data: profileData,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+  } = useQuery({
     queryKey: ["user-profile"],
     queryFn: async () => {
       const token = tokenManager.getToken();
       if (!token) throw new Error("No token");
       return authAPI.getProfile(token);
     },
-    enabled:
-      !!tokenManager.getToken() &&
-      !tokenManager.isTokenExpired(tokenManager.getToken()!),
+    enabled: hasValidToken(),
     retry: false,
   });
 
   useEffect(() => {
-    if (profileData?.success) {
-      setUser(profileData.data.user);
+    if (hasValidToken()) {
+      if (profileData?.success) {
+        setUser(profileData.data.user);
+        setIsInitialized(true);
+      } else if (isProfileError) {
+        setUser(null);
+        setIsInitialized(true);
+      }
+    } else {
+      setUser(null);
+      setIsInitialized(true);
     }
-  }, [profileData]);
+  }, [profileData, isProfileError]);
 
   const { data: refreshData } = useQuery({
     queryKey: ["refresh-token"],
@@ -50,9 +57,7 @@ export const useAuth = () => {
       if (!token) throw new Error("No token");
       return authAPI.refreshToken(token);
     },
-    enabled:
-      !!tokenManager.getToken() &&
-      !tokenManager.isTokenExpired(tokenManager.getToken()!),
+    enabled: hasValidToken(),
     refetchInterval: 5 * 60 * 1000,
     retry: false,
   });
