@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import AuthModal from "./AuthModal";
 
 export default function Hero() {
   return (
@@ -15,13 +15,12 @@ export default function Hero() {
           Manage student fees, automate payment reminders, and track expenses.
           Focus on teaching while we handle the finances.
         </p>
-        <Button
-          size="lg"
-          className="cursor-pointer text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700 dark:bg-yellow-600 dark:hover:bg-yellow-700"
-        >
-          Start Free Trial
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
+        <AuthModal
+          buttonText="Start Free Trial"
+          spanClassName="dark:text-black font-bold"
+          buttonClassname="px-8 py-6"
+          icon=<ArrowRight className="ml-2 h-5 w-5" />
+        />
       </div>
     </section>
   );

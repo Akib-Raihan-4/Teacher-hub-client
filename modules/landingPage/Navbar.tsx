@@ -1,6 +1,6 @@
 import ThemeSwitcher from "@/components/ui/theme-swticher";
 import { BookOpen } from "lucide-react";
-import RegisterModal from "./RegisterModal";
+import AuthModal from "./AuthModal";
 
 export default function Navbar() {
   return (
@@ -13,7 +13,7 @@ export default function Navbar() {
           </div>
           <div className="flex items-center space-x-4">
             <ThemeSwitcher />
-            <RegisterModal />
+            <AuthModal buttonText="Get Started" />
           </div>
         </nav>
       </header>
