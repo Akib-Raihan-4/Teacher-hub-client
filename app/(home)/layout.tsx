@@ -1,5 +1,5 @@
 import { ProtectedRoute } from "@/lib/guard/protected-routes";
-import HomeSidebar from "@/modules/homePage/HomeSidebar/HomeSidebar";
+import HomeSidebar from "@/modules/homePage/shared/HomeSidebar/HomeSidebar";
 
 export default function DashboardLayout({
   children,

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { useAuth } from "@/lib/hooks/useAuth";
 import { createContext, useContext, ReactNode } from "react";
-import { useAuth } from "../hooks/useAuth";
+
 
 interface AuthContextType {
   user: any;

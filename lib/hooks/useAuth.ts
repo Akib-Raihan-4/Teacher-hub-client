@@ -107,7 +107,7 @@ export const useAuth = () => {
     setUser(null);
     queryClient.clear();
     toast.success("Logged out successfully");
-    router.push("/");
+    router.refresh();
   };
 
   const login = (credentials: LoginCredentials) => {

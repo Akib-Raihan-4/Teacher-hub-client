@@ -33,7 +33,7 @@ export default function LoginForm({
   const onSubmit = async (data: LoginFormData) => {
     try {
       await login(data);
-      router.push("/home");
+      router.push("/dashboard");
     } catch (err: unknown) {
       console.error("Login error:", err);
     }
