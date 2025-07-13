@@ -8,14 +8,14 @@ import {
 export const links = [
   {
     label: "Dashboard",
-    href: "#",
+    href: "/dasboard",
     icon: (
       <IconBrandTabler className="h-6 w-6 shrink-0 text-neutral-700 dark:text-neutral-200" />
     ),
   },
   {
     label: "Classrooms",
-    href: "#",
+    href: "/dashboard/classrooms",
     icon: (
       <IconDoor className="h-6 w-6 shrink-0 text-neutral-700 dark:text-neutral-200" />
     ),

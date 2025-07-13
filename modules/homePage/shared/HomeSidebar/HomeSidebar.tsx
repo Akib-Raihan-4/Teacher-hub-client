@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { TExtendedLink } from "./HomeSidebar.helpers";
 
 export default function HomeSidebar() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const { user, logout } = useAuth();
 

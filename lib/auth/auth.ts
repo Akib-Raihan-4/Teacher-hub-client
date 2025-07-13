@@ -6,11 +6,11 @@ import {
   RegisterCredentials,
 } from "@/types/auth";
 
-const API_BASE_URL = "http://localhost:5000/api/auth";
+export const API_BASE_URL = "http://localhost:5000/api";
 
 export const authAPI = {
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
-    const response = await fetch(`${API_BASE_URL}/login`, {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export const authAPI = {
   register: async (
     credentials: RegisterCredentials
   ): Promise<LoginResponse> => {
-    const response = await fetch(`${API_BASE_URL}/register`, {
+    const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export const authAPI = {
   },
 
   refreshToken: async (token: string): Promise<RefreshResponse> => {
-    const response = await fetch(`${API_BASE_URL}/refresh-token`, {
+    const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -66,7 +66,7 @@ export const authAPI = {
   },
 
   getProfile: async (token: string): Promise<ProfileResponse> => {
-    const response = await fetch(`${API_BASE_URL}/profile`, {
+    const response = await fetch(`${API_BASE_URL}/auth/profile`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
