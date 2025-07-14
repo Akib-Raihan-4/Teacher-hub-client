@@ -6,7 +6,7 @@ export default function ClassroomsSummary() {
   const { data: classroomsSummary } = useGetAllClassroomsSummary();
   return (
     <div className="flex flex-col gap-4 xl:flex-row">
-      <Card className="px-7 my-4 w-full bg-white dark:bg-neutral-600 shadow-2xl border border-neutral-100">
+      <Card className="px-7 my-4 w-full bg-white dark:bg-neutral-600 shadow-2xl dark:border-gray-600">
         <div className="flex w-full justify-between items-center ">
           <h1 className="text-2xl font-bold">Total Classrooms</h1>{" "}
           <Warehouse className="h-5 w-5 sm:w-6 sm:h-6" />
@@ -23,7 +23,7 @@ export default function ClassroomsSummary() {
         </h1>
       </Card>
 
-      <Card className="px-7 my-4 w-full bg-white dark:bg-neutral-600 shadow-2xl border border-neutral-100">
+      <Card className="px-7 my-4 w-full bg-white dark:bg-neutral-600 shadow-2xl dark:border-gray-600">
         <div className="flex w-full justify-between items-center ">
           <h1 className="text-2xl font-bold">Total Students</h1>{" "}
           <Users2 className="h-5 w-5 sm:w-6 sm:h-6" />
@@ -38,7 +38,7 @@ export default function ClassroomsSummary() {
         </h1>
       </Card>
 
-      <Card className="px-7 my-4 w-full bg-white dark:bg-neutral-600 shadow-2xl border border-neutral-100">
+      <Card className="px-7 my-4 w-full bg-white dark:bg-neutral-600 shadow-2xl dark:border-gray-600">
         <div className="flex w-full justify-between items-center ">
           <h1 className="text-2xl font-bold">Total Revenue</h1>{" "}
           <HandCoins className="h-5 w-5 sm:w-6 sm:h-6" />

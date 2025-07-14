@@ -26,7 +26,10 @@ export default function HomeSidebar() {
     link.label === "Logout"
       ? {
           ...link,
-          onClick: () => setLogoutDialogOpen(true),
+          onClick: () => {
+            setLogoutDialogOpen(true);
+            setOpen(false);
+          },
         }
       : link
   );
@@ -92,7 +95,7 @@ export default function HomeSidebar() {
       <Dialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you sure you want to logout?</DialogTitle>
+            <DialogTitle>Are you sure you want to logout ?</DialogTitle>
           </DialogHeader>
           <DialogFooter className="flex justify-end gap-2">
             <Button
