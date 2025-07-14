@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { TExtendedLink } from "./HomeSidebar.helpers";
+import ThemeSwitcher from "@/components/ui/theme-swticher";
 
 export default function HomeSidebar() {
   const [open, setOpen] = useState(false);
@@ -57,31 +58,33 @@ export default function HomeSidebar() {
                 ))}
               </div>
             </div>
-
-            <SidebarLink
-              link={{
-                href: "#",
-                label: (
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
-                      {user?.name}
-                    </span>
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                      {user?.email}
-                    </span>
-                  </div>
-                ),
-                icon: (
-                  <Image
-                    src="/avatar.svg"
-                    className="h-7 w-7 shrink-0 rounded-full"
-                    width={28}
-                    height={28}
-                    alt="Avatar"
-                  />
-                ),
-              }}
-            />
+            <div className="flex justify-between items-center">
+              <SidebarLink
+                link={{
+                  href: "#",
+                  label: (
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
+                        {user?.name}
+                      </span>
+                      <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                        {user?.email}
+                      </span>
+                    </div>
+                  ),
+                  icon: (
+                    <Image
+                      src="/avatar.svg"
+                      className="h-7 w-7 shrink-0 rounded-full"
+                      width={28}
+                      height={28}
+                      alt="Avatar"
+                    />
+                  ),
+                }}
+              />
+              {open && <ThemeSwitcher />}
+            </div>
           </SidebarBody>
         </Sidebar>
       </div>

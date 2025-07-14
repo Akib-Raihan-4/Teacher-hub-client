@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useState } from "react";
-// import Select from "react-select";
 import {
   classroomSchema,
   ClassroomFormValues,
@@ -39,7 +38,6 @@ export const CreateClassroomModal = () => {
     handleSubmit,
     setValue,
     reset,
-    // watch,
     formState: { errors },
   } = useForm<ClassroomFormValues>({
     resolver: zodResolver(classroomSchema),
@@ -50,8 +48,6 @@ export const CreateClassroomModal = () => {
     },
     mode: "onChange",
   });
-
-  //   const selectedDays = watch("days");
 
   const onSubmit = (data: ClassroomFormValues) => {
     const payload = {
@@ -69,7 +65,13 @@ export const CreateClassroomModal = () => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        if (!isOpen) reset();
+      }}
+    >
       <DialogTrigger asChild>
         <Button className="cursor-pointer">
           {" "}
@@ -145,7 +147,10 @@ export const CreateClassroomModal = () => {
               variant="destructive"
               className="cursor-pointer"
               type="button"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                setOpen(false);
+                reset();
+              }}
             >
               Cancel
             </Button>

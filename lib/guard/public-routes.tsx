@@ -26,7 +26,7 @@ export const PublicRoute = ({ children, fallback }: PublicRouteProps) => {
   }, [isAuthenticated, isInitialized, router]);
 
   if (isAuthenticated && isInitialized) {
-    return fallback || <Loader />;
+    return fallback || <Loader className="h-screen" />;
   }
 
   return <>{children}</>;

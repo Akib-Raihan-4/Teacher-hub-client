@@ -26,7 +26,7 @@ export const ProtectedRoute = ({ children, fallback }: ProtectedRouteProps) => {
   }, [isAuthenticated, isInitialized, router]);
 
   if (!isAuthenticated && isInitialized) {
-    return fallback || <Loader />;
+    return fallback || <Loader className="h-screen" />;
   }
 
   return <>{children}</>;
