@@ -16,7 +16,7 @@ export default function DashboardClassroomPage() {
 
       <div className="flex justify-between items-center mt-10">
         <h1 className="text-3xl font-bold">Your Classrooms</h1>
-        <CreateClassroomModal />
+        <CreateClassroomModal/>
       </div>
 
       <AllClassrooms />

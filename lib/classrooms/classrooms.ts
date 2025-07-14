@@ -65,4 +65,43 @@ export const classroomAPI = {
 
     return data.data;
   },
+
+  deleteClassroom: async (
+    token: string,
+    classroomId: string
+  ): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/classroom/${classroomId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to delete classroom");
+    }
+  },
+
+  updateClassroom: async (
+    token: string,
+    classroomId: string,
+    payload: IClassroomRequest
+  ): Promise<IClassroomExtendedResponse> => {
+    const response = await fetch(`${API_BASE_URL}/classroom/${classroomId}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to update classroom");
+    }
+    return data.data;
+  },
 };

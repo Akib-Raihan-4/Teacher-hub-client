@@ -1,0 +1,178 @@
+"use client";
+
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { IClassroomExtendedResponse } from "@/types/classroom";
+import { useUpdateClassroom } from "../hooks/useUpdateClassroom";
+import MultipleSelector, { Option } from "@/components/ui/MultiSelector";
+import { useEffect } from "react";
+import {
+  ClassroomFormValues,
+  classroomSchema,
+} from "../CreateClassroomForm/CreateClassroomForm.helpers";
+import { DialogTitle } from "@radix-ui/react-dialog";
+
+const dayOptions: Option[] = [
+  { value: "Monday", label: "Monday" },
+  { value: "Tuesday", label: "Tuesday" },
+  { value: "Wednesday", label: "Wednesday" },
+  { value: "Thursday", label: "Thursday" },
+  { value: "Friday", label: "Friday" },
+  { value: "Saturday", label: "Saturday" },
+  { value: "Sunday", label: "Sunday" },
+];
+
+export const EditClassroomModal = ({
+  classroom,
+  open,
+  onOpenChange,
+}: {
+  classroom: IClassroomExtendedResponse;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) => {
+  const { mutate: updateClassroom, isPending, error } = useUpdateClassroom();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    formState: { errors, isDirty },
+  } = useForm<ClassroomFormValues>({
+    resolver: zodResolver(classroomSchema),
+    defaultValues: {
+      name: classroom.name,
+      subject: classroom.subject,
+      days: classroom.days,
+    },
+    mode: "onChange",
+    shouldFocusError: false,
+    shouldUnregister: true,
+  });
+
+  useEffect(() => {
+    reset({
+      name: classroom.name,
+      subject: classroom.subject,
+      days: classroom.days,
+    });
+  }, [classroom, reset]);
+
+  const onSubmit = (data: ClassroomFormValues) => {
+    updateClassroom(
+      {
+        classroomId: classroom.id,
+        payload: {
+          name: data.name,
+          subject: data.subject,
+          days: data.days,
+        },
+      },
+      {
+        onSuccess: () => {
+          onOpenChange(false);
+        },
+      }
+    );
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        onOpenChange(isOpen);
+        if (!isOpen) reset();
+      }}
+    >
+      <DialogContent
+        className="sm:max-w-[500px]"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
+        <DialogTitle className="font-bold sm:text-2xl text-xl text-center sm:pb-8 pb-4">
+          Edit Classroom
+        </DialogTitle>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <Label htmlFor="name" className="sm:text-xl text-lg">
+              Classroom Name
+            </Label>
+            <Input
+              id="name"
+              placeholder="Classroom Name"
+              {...register("name")}
+              className="my-4 border-2 border-foreground"
+            />
+            {errors.name && (
+              <p className="text-sm text-red-500">{errors.name.message}</p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="subject" className="sm:text-xl text-lg">
+              Subject
+            </Label>
+            <Input
+              id="subject"
+              placeholder="Subject Name"
+              {...register("subject")}
+              className="my-4 border-2 border-foreground"
+            />
+            {errors.subject && (
+              <p className="text-sm text-red-500">{errors.subject.message}</p>
+            )}
+          </div>
+
+          <div>
+            <Label className="sm:text-xl text-lg">Days</Label>
+            <MultipleSelector
+              className="border-foreground border-2 my-4"
+              defaultOptions={dayOptions}
+              placeholder="Select Days"
+              value={watch("days").map((day) => ({ value: day, label: day }))}
+              onChange={(selected) =>
+                setValue(
+                  "days",
+                  selected.map((s) => s.value),
+                  { shouldValidate: true, shouldDirty: true } // Fixed: Added shouldDirty
+                )
+              }
+            />
+
+            {errors.days && (
+              <p className="text-sm text-red-500">{errors.days.message}</p>
+            )}
+          </div>
+
+          {error && <p className="text-sm text-red-500">{error.message}</p>}
+          <div className="flex justify-end gap-4">
+            <Button
+              className="cursor-pointer"
+              type="submit"
+              disabled={isPending || !isDirty}
+            >
+              {isPending ? "Updating..." : "Update"}
+            </Button>
+            <Button
+              variant="destructive"
+              className="cursor-pointer"
+              type="button"
+              onClick={() => {
+                onOpenChange(false);
+                reset();
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
