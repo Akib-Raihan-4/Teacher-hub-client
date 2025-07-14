@@ -16,7 +16,12 @@ export default function AllClassrooms() {
   }
 
   if (error) return <p>Error: {error.message}</p>;
-  if (data?.length === 0) return <p>No classrooms found.</p>;
+  if (data?.length === 0)
+    return (
+      <div className="flex justify-center items-center md:min-h-[40rem] min-h-[20rem]">
+        <p className="text-2xl font-semibold">No Classrooms Found</p>
+      </div>
+    );
 
   return (
     <div className="grid sm:grid-cols-2 gap-6 mt-12 mb-24">

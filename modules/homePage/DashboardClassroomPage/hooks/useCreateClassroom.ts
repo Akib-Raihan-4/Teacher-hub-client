@@ -5,6 +5,7 @@ import {
   IClassroomRequest,
 } from "@/types/classroom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export const useCreateClassroom = () => {
   const queryClient = useQueryClient();
@@ -23,6 +24,13 @@ export const useCreateClassroom = () => {
       });
       queryClient.invalidateQueries({
         queryKey: ["classrooms-summary"],
+      });
+      toast.success("Classroom created successfully");
+    },
+
+    onError: (error: Error) => {
+      toast.error("Failed to create classroom", {
+        description: error.message,
       });
     },
   });

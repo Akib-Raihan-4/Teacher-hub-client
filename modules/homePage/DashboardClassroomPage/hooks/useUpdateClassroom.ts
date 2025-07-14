@@ -5,6 +5,7 @@ import {
   IClassroomExtendedResponse,
   IClassroomRequest,
 } from "@/types/classroom";
+import { toast } from "sonner";
 
 export const useUpdateClassroom = () => {
   const queryClient = useQueryClient();
@@ -26,6 +27,12 @@ export const useUpdateClassroom = () => {
       });
       queryClient.invalidateQueries({
         queryKey: ["classrooms-summary"],
+      });
+      toast.success("Classroom updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error("Failed to update classroom", {
+        description: error.message,
       });
     },
   });
