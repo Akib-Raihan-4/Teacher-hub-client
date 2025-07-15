@@ -72,8 +72,8 @@ export const CreateClassroomModal = () => {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-2 bg-gray-200 cursor-pointer px-4 py-2 rounded-3xl sm:w-56 w-38 text-gray-900">
-          <Plus  />
+        <Button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-yellow-600 dark:hover:bg-yellow-700 cursor-pointer p-4 rounded-3xl sm:w-56 w-40 text-white">
+          <Plus className="!w-5 !h-5" />
           <span className="font-bold sm:text-lg text-sm">Create Classroom</span>
         </Button>
       </DialogTrigger>

@@ -8,7 +8,7 @@ import {
 export const links = [
   {
     label: "Dashboard",
-    href: "/dasboard",
+    href: "/dashboard",
     icon: (
       <IconBrandTabler className="h-6 w-6 shrink-0 text-neutral-700 dark:text-neutral-200" />
     ),

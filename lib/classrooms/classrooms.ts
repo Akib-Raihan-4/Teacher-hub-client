@@ -104,4 +104,22 @@ export const classroomAPI = {
     }
     return data.data;
   },
+
+  getClassroomById: async (
+    token: string,
+    classroomId: string
+  ): Promise<IClassroomExtendedResponse> => {
+    const response = await fetch(`${API_BASE_URL}/classroom/${classroomId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to fetch classroom");
+    }
+    return data.data;
+  },
 };

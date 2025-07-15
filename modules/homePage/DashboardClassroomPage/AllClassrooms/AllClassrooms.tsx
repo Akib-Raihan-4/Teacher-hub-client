@@ -25,7 +25,7 @@ export default function AllClassrooms() {
 
   return (
     <div className="grid sm:grid-cols-2 gap-6 mt-12 mb-24">
-      {data!.map((classroom) => (
+      {data?.map((classroom) => (
         <ClassroomCard key={classroom.id} classroom={classroom} />
       ))}
     </div>

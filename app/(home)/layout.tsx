@@ -10,7 +10,7 @@ export default function DashboardLayout({
     <ProtectedRoute>
       <div className="flex flex-col md:flex-row h-screen">
         <HomeSidebar />
-        <main className="sm:pl-12 pl-4 sm:pr-6 pr-4 sm:pt-8 pt-2 flex-1 overflow-y-auto bg-white dark:bg-neutral-800">
+        <main className="sm:pl-12 pl-4 sm:pr-6 pr-4 sm:pt-8 pt-2 flex-1 overflow-y-auto">
           {children}
         </main>
       </div>

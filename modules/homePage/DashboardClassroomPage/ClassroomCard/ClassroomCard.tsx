@@ -28,6 +28,7 @@ import { Calendar, Ellipsis, Users, Wallet } from "lucide-react";
 import { useDeleteClassroom } from "../hooks/useDeleteClassroom";
 import { useState } from "react";
 import { EditClassroomModal } from "../EditClassroomModal/EditClassroomModal";
+import { useRouter } from "next/navigation";
 
 export default function ClassroomCard({
   classroom,
@@ -37,6 +38,7 @@ export default function ClassroomCard({
   const { mutate: deleteClassroom, isPending } = useDeleteClassroom();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const router = useRouter();
 
   const handleDelete = () => {
     deleteClassroom(classroom.id);
@@ -45,19 +47,17 @@ export default function ClassroomCard({
 
   return (
     <>
-      <Card className="dark:bg-neutral-600 shadow-2xl dark:border-gray-600 hover:dark:bg-neutral-700 hover:bg-neutral-100 transition-all duration-300  group">
+      <Card className="bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 from-blue-50 to-blue-100 shadow-2xl hover:shadow-lg dark:hover:from-gray-800 dark:hover:to-gray-700 hover:from-blue-100 hover:to-blue-200 transition-all duration-300 group">
         <CardHeader>
           <div className="flex items-center justify-between pb-3">
             <div className="w-3 h-3 rounded-full bg-green-500"></div>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Ellipsis className="h-5 w-5 cursor-pointer" />
+                <Ellipsis className="h-5 w-5 cursor-pointer dark:text-gray-400 text-gray-600  dark:hover:text-yellow-400 hover:text-blue-600 transition-colors" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onClick={() => setIsEditDialogOpen(true)} // Open edit modal
-                >
+                <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
                   Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -70,22 +70,35 @@ export default function ClassroomCard({
             </DropdownMenu>
           </div>
 
-          <CardTitle className="text-lg">{classroom.name}</CardTitle>
-          <CardDescription>{classroom.subject}</CardDescription>
+          <CardTitle
+            className="text-lg cursor-pointer  dark:text-white text-gray-800 dark:hover:text-yellow-400 hover:text-blue-600 transition-colors"
+            onClick={() => router.push(`/classroom/${classroom.id}`)}
+          >
+            {classroom.name}
+          </CardTitle>
+          <CardDescription className=" dark:text-gray-400 text-gray-600">
+            {classroom.subject}
+          </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-3">
-          <div className="flex items-center gap-2 text-sm">
-            <Users className="h-6 w-6" />
-            <span>{classroom.studentsCount} students</span>
+          <div className="flex items-center gap-2 text-sm  dark:text-gray-300 text-gray-700">
+            <Users className="h-6 w-6  dark:text-yellow-500 text-blue-500" />
+            <span className="font-semibold  dark:text-yellow-400 text-blue-600">
+              {classroom.studentsCount} students
+            </span>
           </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Calendar className="h-6 w-6" />
-            <span>{classroom.days.join(", ")}</span>
+          <div className="flex items-center gap-2 text-sm  ">
+            <Calendar className="h-6 w-6 dark:text-yellow-500 text-blue-500" />
+            <span className="font-semibold  dark:text-yellow-400 text-blue-600">
+              {classroom.days.join(", ")}
+            </span>
           </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Wallet className="h-6 w-6" />
-            <span>{classroom.totalMonthlyFee} bdt/month</span>
+          <div className="flex items-center gap-2 text-sm  dark:text-gray-300 text-gray-700">
+            <Wallet className="h-6 w-6  dark:text-yellow-500 text-blue-500" />
+            <span className="font-semibold  dark:text-yellow-400 text-blue-600">
+              {classroom.totalMonthlyFee} bdt/month
+            </span>
           </div>
         </CardContent>
       </Card>
