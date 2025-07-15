@@ -14,8 +14,13 @@ export default function AllClassrooms() {
       </div>
     );
   }
-
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) {
+    return (
+      <div className="flex justify-center items-center md:min-h-[40rem] min-h-[20rem]">
+        <p className="text-red-500">Error: {error.message}</p>
+      </div>
+    );
+  }
   if (data?.length === 0)
     return (
       <div className="flex justify-center items-center md:min-h-[40rem] min-h-[20rem]">

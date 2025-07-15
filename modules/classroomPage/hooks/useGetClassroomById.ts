@@ -1,12 +1,12 @@
 import { tokenManager } from "@/lib/auth/token-manager";
 import { classroomAPI } from "@/lib/classrooms/classrooms";
 import { useAuth } from "@/lib/hooks/useAuth";
-import { IClassroomExtendedResponse } from "@/types/classroom";
+import { IClassroomWithSummary } from "@/types/classroom";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetClassroomById = (classroomId: string) => {
   const { hasValidToken } = useAuth();
-  return useQuery<IClassroomExtendedResponse, Error>({
+  return useQuery<IClassroomWithSummary, Error>({
     queryKey: ["classroom", classroomId],
     queryFn: () => {
       const token = tokenManager.getToken();

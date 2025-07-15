@@ -2,6 +2,7 @@ import {
   IAllClassroomsSummary,
   IClassroomExtendedResponse,
   IClassroomRequest,
+  IClassroomWithSummary,
 } from "@/types/classroom";
 import { API_BASE_URL } from "../auth/auth";
 
@@ -108,8 +109,8 @@ export const classroomAPI = {
   getClassroomById: async (
     token: string,
     classroomId: string
-  ): Promise<IClassroomExtendedResponse> => {
-    const response = await fetch(`${API_BASE_URL}/classroom/${classroomId}`, {
+  ): Promise<IClassroomWithSummary> => {
+    const response = await fetch(`${API_BASE_URL}/classroom/${classroomId}/summary`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

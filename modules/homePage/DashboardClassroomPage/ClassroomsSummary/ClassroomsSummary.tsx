@@ -1,9 +1,28 @@
 import { Card } from "@/components/ui/card";
 import { useGetAllClassroomsSummary } from "../hooks/useGetAllClassroomsSummary";
 import { HandCoins, Users2, Warehouse } from "lucide-react";
+import Loader from "@/components/shared/loader/Loader";
 
 export default function ClassroomsSummary() {
-  const { data: classroomsSummary } = useGetAllClassroomsSummary();
+  const {
+    data: classroomsSummary,
+    isLoading,
+    error,
+  } = useGetAllClassroomsSummary();
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center md:min-h-[40rem] min-h-[20rem]">
+        <Loader />
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="flex justify-center items-center md:min-h-[40rem] min-h-[20rem]">
+        <p className="text-red-500">Error: {error.message}</p>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-4 xl:flex-row">
       <Card className="px-7 py-6 w-full bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 from-blue-50 to-blue-100 shadow-2xl hover:shadow-lg transition-all duration-300">

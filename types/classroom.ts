@@ -13,6 +13,18 @@ export interface IClassroomExtendedResponse extends IClassroomResponse {
   totalMonthlyFee: number;
 }
 
+export interface IClassroomWithSummary extends IClassroomExtendedResponse {
+  totalRevenue: number;
+  totalDueAmount: number;
+  newStudentsThisMonth: number;
+  lastMonth: {
+    revenue: number;
+    dueAmount: number;
+    completionPercentage: number;
+    paidStudentsCount: number;
+  };
+}
+
 export interface IClassroomRequest {
   name: string;
   days: string[];
@@ -29,3 +41,4 @@ export interface IAllClassroomsSummary {
     currentMonthRevenue: number;
   };
 }
+
