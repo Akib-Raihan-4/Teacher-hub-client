@@ -1,5 +1,5 @@
-import { tokenManager } from "@/lib/auth/token-manager";
-import { classroomAPI } from "@/lib/classrooms/classrooms";
+import { tokenManager } from "@/lib/api/auth/token-manager";
+import { classroomAPI } from "@/lib/api/classrooms/classrooms";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 

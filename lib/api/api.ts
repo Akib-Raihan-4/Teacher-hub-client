@@ -1,5 +1,4 @@
-import { tokenManager } from "../auth/token-manager";
-
+import { tokenManager } from "./auth/token-manager";
 
 export const createAuthenticatedFetch = () => {
   return async (url: string, options: RequestInit = {}) => {

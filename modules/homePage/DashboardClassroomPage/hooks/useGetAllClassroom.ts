@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { IClassroomExtendedResponse, } from "@/types/classroom";
-import { classroomAPI } from "@/lib/classrooms/classrooms";
+import { IClassroomExtendedResponse } from "@/types/classroom";
+import { classroomAPI } from "@/lib/api/classrooms/classrooms";
 import { useAuth } from "@/lib/hooks/useAuth";
-import { tokenManager } from "@/lib/auth/token-manager";
+import { tokenManager } from "@/lib/api/auth/token-manager";
 
 export const useGetAllClassrooms = () => {
   const { hasValidToken } = useAuth();
@@ -16,6 +16,6 @@ export const useGetAllClassrooms = () => {
     },
     enabled: hasValidToken(),
     staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   });
 };

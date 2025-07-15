@@ -110,13 +110,16 @@ export const classroomAPI = {
     token: string,
     classroomId: string
   ): Promise<IClassroomWithSummary> => {
-    const response = await fetch(`${API_BASE_URL}/classroom/${classroomId}/summary`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${API_BASE_URL}/classroom/${classroomId}/summary`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await response.json();
     if (!response.ok || !data.success) {
       throw new Error(data.message || "Failed to fetch classroom");

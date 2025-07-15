@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import type { User, LoginCredentials, RegisterCredentials } from "@/types/auth";
-import { tokenManager } from "../auth/token-manager";
-import { authAPI } from "../auth/auth";
+import { tokenManager } from "../api/auth/token-manager";
+import { authAPI } from "../api/auth/auth";
 import { toast } from "sonner";
 
 export const useAuth = () => {
