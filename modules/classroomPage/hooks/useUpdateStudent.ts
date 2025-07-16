@@ -4,16 +4,17 @@ import { IStudentPaymentDetails, IStudentRequest } from "@/types/student";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useAddStudent = (classroomId: string) => {
+export const useUpdateStudent = (classroomId: string) => {
   const queryClient = useQueryClient();
-  return useMutation<IStudentPaymentDetails, Error, IStudentRequest>({
-    mutationFn: async (payload) => {
+  return useMutation<
+    IStudentPaymentDetails,
+    Error,
+    { studentId: string; payload: IStudentRequest }
+  >({
+    mutationFn: async ({ studentId, payload }) => {
       const token = tokenManager.getToken();
       if (!token) throw new Error("No token");
-      return studentAPI.addStudent(token, {
-        ...payload,
-        classroomId,
-      });
+      return studentAPI.updateStudent(token, studentId, payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -22,10 +23,13 @@ export const useAddStudent = (classroomId: string) => {
       queryClient.invalidateQueries({
         queryKey: ["classroom", classroomId],
       });
-      toast.success("Student added successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["classrooms"],
+      });
+      toast.success("Student updated successfully");
     },
     onError: (error: Error) => {
-      toast.error("Failed to add student", {
+      toast.error("Failed to update student", {
         description: error.message,
       });
     },

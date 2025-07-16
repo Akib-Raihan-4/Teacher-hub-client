@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { ArrowBigLeftDash } from "lucide-react";
 import ClassroomSummaryWithHeader from "@/modules/classroomPage/ClassroomSummary/ClassroomSummary";
+import { AddStudentFormModal } from "@/modules/classroomPage/AddStudentModal/AddStudentFormModal";
+import AllStudents from "@/modules/classroomPage/AllStudents/AllStudents";
 
 export default function Classroom(props: { params: Promise<{ id: string }> }) {
   const { id } = React.use(props.params);
@@ -20,6 +22,12 @@ export default function Classroom(props: { params: Promise<{ id: string }> }) {
         <span className="text-xl"> Back to Classrooms</span>
       </Button>
       <ClassroomSummaryWithHeader classroomId={id} />
+
+      <div className="flex justify-between items-center my-9">
+        <h1 className="text-4xl font-bold">Students</h1>
+        <AddStudentFormModal classroomId={id} />
+      </div>
+      <AllStudents classroomId={id} />
     </>
   );
 }

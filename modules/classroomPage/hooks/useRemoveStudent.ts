@@ -1,19 +1,15 @@
 import { tokenManager } from "@/lib/api/auth/token-manager";
 import { studentAPI } from "@/lib/api/students/students";
-import { IStudentPaymentDetails, IStudentRequest } from "@/types/student";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useAddStudent = (classroomId: string) => {
+export const useRemoveStudent = (classroomId: string) => {
   const queryClient = useQueryClient();
-  return useMutation<IStudentPaymentDetails, Error, IStudentRequest>({
-    mutationFn: async (payload) => {
+  return useMutation<void, Error, string>({
+    mutationFn: async (studentId: string) => {
       const token = tokenManager.getToken();
       if (!token) throw new Error("No token");
-      return studentAPI.addStudent(token, {
-        ...payload,
-        classroomId,
-      });
+      return studentAPI.removeStudent(token, studentId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -22,10 +18,10 @@ export const useAddStudent = (classroomId: string) => {
       queryClient.invalidateQueries({
         queryKey: ["classroom", classroomId],
       });
-      toast.success("Student added successfully");
+      toast.success("Student removed successfully");
     },
     onError: (error: Error) => {
-      toast.error("Failed to add student", {
+      toast.error("Failed to remove student", {
         description: error.message,
       });
     },

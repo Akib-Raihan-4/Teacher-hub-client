@@ -10,7 +10,7 @@ export interface IStudentResponse {
   id: string;
   name: string;
   parentPhone: string;
-  email: string | null;
+  email: string;
   monthlyFee: number;
   classroomId: string;
   createdAt: Date;

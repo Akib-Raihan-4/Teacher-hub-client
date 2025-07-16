@@ -5,6 +5,7 @@ import {
   IClassroomWithSummary,
 } from "@/types/classroom";
 import { API_BASE_URL } from "../auth/auth";
+import { IStudentPaymentDetails } from "@/types/student";
 
 export const classroomAPI = {
   getAllClassrooms: async (
@@ -112,6 +113,27 @@ export const classroomAPI = {
   ): Promise<IClassroomWithSummary> => {
     const response = await fetch(
       `${API_BASE_URL}/classroom/${classroomId}/summary`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to fetch classroom");
+    }
+    return data.data;
+  },
+
+  getStudentsByClassroom: async (
+    token: string,
+    classroomId: string
+  ): Promise<IStudentPaymentDetails[]> => {
+    const response = await fetch(
+      `${API_BASE_URL}/classroom/${classroomId}/students`,
       {
         method: "GET",
         headers: {
