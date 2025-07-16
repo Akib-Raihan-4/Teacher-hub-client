@@ -1,18 +1,20 @@
 import { tokenManager } from "@/lib/api/auth/token-manager";
-import { studentAPI } from "@/lib/api/students/students";
-import { IStudentPaymentDetails, IStudentRequest } from "@/types/student";
+import { paymentAPI } from "@/lib/api/payments/payments";
+
+import { IPaymentRequest, IPaymentResponse } from "@/types/payment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useAddStudent = (classroomId: string) => {
+export const useCreatePayment = (studentId: string, classroomId: string) => {
   const queryClient = useQueryClient();
-  return useMutation<IStudentPaymentDetails, Error, IStudentRequest>({
+
+  return useMutation<IPaymentResponse, Error, IPaymentRequest>({
     mutationFn: async (payload) => {
       const token = tokenManager.getToken();
       if (!token) throw new Error("No token");
-      return studentAPI.addStudent(token, {
+      return paymentAPI.createPayment(token, {
         ...payload,
-        classroomId,
+        studentId,
       });
     },
     onSuccess: () => {
@@ -23,15 +25,12 @@ export const useAddStudent = (classroomId: string) => {
         queryKey: ["classroom", classroomId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["classrooms"],
-      });
-      queryClient.invalidateQueries({
         queryKey: ["classrooms-summary"],
       });
-      toast.success("Student added successfully");
+      toast.success("Payment created successfully");
     },
     onError: (error: Error) => {
-      toast.error("Failed to add student", {
+      toast.error("Failed to create payment", {
         description: error.message,
       });
     },

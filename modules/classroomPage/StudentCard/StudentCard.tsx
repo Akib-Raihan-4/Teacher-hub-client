@@ -23,6 +23,7 @@ import { CheckCircle, Ellipsis, Mail, Phone, Wallet2 } from "lucide-react";
 import { useState } from "react";
 import { useRemoveStudent } from "../hooks/useRemoveStudent";
 import { EditStudentFormModal } from "../EditStudentFormModal/EditStudentFormModal";
+import { CreatePaymentFormModal } from "../CreatePaymentFormModal/CreatePaymentFormModal";
 
 const getPaymentStatusBadge = (status: boolean) => {
   if (status) {
@@ -42,6 +43,7 @@ export default function StudentCard({
   const { mutate: removeStudent, isPending } = useRemoveStudent(classroomId);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
 
   const handleDelete = () => {
     removeStudent(student.id);
@@ -168,6 +170,7 @@ export default function StudentCard({
                     <Button
                       size="sm"
                       className="w-full bg-green-600 hover:bg-green-700 text-white cursor-pointer"
+                      onClick={() => setIsPaymentDialogOpen(true)}
                     >
                       <Wallet2 className="h-4 w-4 mr-1" />
                       Pay
@@ -209,6 +212,12 @@ export default function StudentCard({
         student={student}
         open={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
+      />
+      <CreatePaymentFormModal
+        classroomId={classroomId}
+        studentId={student.id}
+        open={isPaymentDialogOpen}
+        onOpenChange={setIsPaymentDialogOpen}
       />
     </>
   );

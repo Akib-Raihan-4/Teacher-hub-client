@@ -27,7 +27,7 @@ export default function Classroom(props: { params: Promise<{ id: string }> }) {
         <h1 className="text-4xl font-bold">Students</h1>
         <AddStudentFormModal classroomId={id} />
       </div>
-      <AllStudents classroomId={id} />
+      <AllStudents classroomId={id}   />
     </>
   );
 }

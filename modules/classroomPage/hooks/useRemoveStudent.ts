@@ -18,6 +18,12 @@ export const useRemoveStudent = (classroomId: string) => {
       queryClient.invalidateQueries({
         queryKey: ["classroom", classroomId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["classrooms"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["classrooms-summary"],
+      });
       toast.success("Student removed successfully");
     },
     onError: (error: Error) => {
