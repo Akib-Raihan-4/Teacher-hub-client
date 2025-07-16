@@ -132,7 +132,8 @@ export const classroomAPI = {
   getStudentsByClassroom: async (
     token: string,
     classroomId: string,
-    paginationParams?: PaginationParams
+    paginationParams?: PaginationParams,
+    search?: string
   ): Promise<PaginatedResponse<IStudentPaymentDetails[]>> => {
     const url = new URL(`${API_BASE_URL}/classroom/${classroomId}/students`);
 
@@ -141,6 +142,9 @@ export const classroomAPI = {
     }
     if (paginationParams?.limit) {
       url.searchParams.append("limit", paginationParams.limit.toString());
+    }
+    if (search) {
+      url.searchParams.append("search", search);
     }
 
     const response = await fetch(url.toString(), {

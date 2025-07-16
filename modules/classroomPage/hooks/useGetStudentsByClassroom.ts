@@ -7,7 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useGetStudentsByClassroom = (
   classroomId: string,
-  paginationParams?: { page?: number; limit?: number }
+  paginationParams?: { page?: number; limit?: number },
+  search?: string
 ) => {
   const { hasValidToken } = useAuth();
 
@@ -17,6 +18,7 @@ export const useGetStudentsByClassroom = (
       classroomId,
       paginationParams?.page,
       paginationParams?.limit,
+      search,
     ],
     queryFn: async () => {
       const token = tokenManager.getToken();
@@ -24,7 +26,8 @@ export const useGetStudentsByClassroom = (
       return classroomAPI.getStudentsByClassroom(
         token,
         classroomId,
-        paginationParams
+        paginationParams,
+        search
       );
     },
     enabled: hasValidToken(),

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Pagination,
   PaginationContent,
@@ -8,20 +8,33 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Input } from "@/components/ui/input";
+
+import { SearchIcon } from "lucide-react";
 import Loader from "@/components/shared/loader/Loader";
 import { useGetStudentsByClassroom } from "../hooks/useGetStudentsByClassroom";
 import StudentCard from "../StudentCard/StudentCard";
+import { useDebounce } from "../hooks/useDebounce";
 
 export default function AllStudents({ classroomId }: { classroomId: string }) {
   const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeSearch, setActiveSearch] = useState("");
   const limit = 5;
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    setPage(1);
+    setActiveSearch(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
 
   const {
     data: response,
     isLoading,
     error,
     isFetching,
-  } = useGetStudentsByClassroom(classroomId, { page, limit });
+  } = useGetStudentsByClassroom(classroomId, { page, limit }, activeSearch);
 
   const handlePageChange = (newPage: number) => {
     if (!isFetching) {
@@ -29,13 +42,9 @@ export default function AllStudents({ classroomId }: { classroomId: string }) {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center md:min-h-[40rem] min-h-[20rem]">
-        <Loader />
-      </div>
-    );
-  }
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
 
   if (error) {
     return (
@@ -56,9 +65,29 @@ export default function AllStudents({ classroomId }: { classroomId: string }) {
 
   return (
     <div className="mb-14">
-      {students.length === 0 ? (
+      {/* Search Bar */}
+      <div className="relative mb-6 max-w-md">
+        <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search students by name..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className="pl-10 border-2 shadow-xl h-10"
+        />
+      </div>
+
+      {/* Results */}
+      {isLoading ? (
+        <div className="flex justify-center items-center min-h-[10rem]">
+          <Loader />
+        </div>
+      ) : students.length === 0 ? (
         <div className="flex justify-center items-center md:min-h-[40rem] min-h-[20rem]">
-          <p className="text-gray-500">No Students are Enrolled</p>
+          <p className="text-gray-500">
+            {activeSearch
+              ? `No students found for "${activeSearch}"`
+              : "No Students are Enrolled"}
+          </p>
         </div>
       ) : (
         <>
