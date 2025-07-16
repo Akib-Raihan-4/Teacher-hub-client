@@ -6,6 +6,7 @@ import {
 } from "@/types/classroom";
 import { API_BASE_URL } from "../auth/auth";
 import { IStudentPaymentDetails } from "@/types/student";
+import { PaginatedResponse, PaginationParams } from "@/types/pagination";
 
 export const classroomAPI = {
   getAllClassrooms: async (
@@ -130,22 +131,34 @@ export const classroomAPI = {
 
   getStudentsByClassroom: async (
     token: string,
-    classroomId: string
-  ): Promise<IStudentPaymentDetails[]> => {
-    const response = await fetch(
-      `${API_BASE_URL}/classroom/${classroomId}/students`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    classroomId: string,
+    paginationParams?: PaginationParams
+  ): Promise<PaginatedResponse<IStudentPaymentDetails[]>> => {
+    const url = new URL(`${API_BASE_URL}/classroom/${classroomId}/students`);
+
+    if (paginationParams?.page) {
+      url.searchParams.append("page", paginationParams.page.toString());
+    }
+    if (paginationParams?.limit) {
+      url.searchParams.append("limit", paginationParams.limit.toString());
+    }
+
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
     const data = await response.json();
     if (!response.ok || !data.success) {
-      throw new Error(data.message || "Failed to fetch classroom");
+      throw new Error(data.message || "Failed to fetch students");
     }
-    return data.data;
+
+    return {
+      data: data.data,
+      pagination: data.pagination,
+    };
   },
 };
