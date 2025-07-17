@@ -1,4 +1,8 @@
-import { IStudentPaymentDetails, IStudentRequest } from "@/types/student";
+import {
+  IStudentPaymentDetails,
+  IStudentRequest,
+  IStudentSummary,
+} from "@/types/student";
 import { API_BASE_URL } from "../auth/auth";
 
 export const studentAPI = {
@@ -51,6 +55,26 @@ export const studentAPI = {
     const data = await response.json();
     if (!response.ok || !data.success) {
       throw new Error(data.message || "Failed to update student");
+    }
+    return data.data;
+  },
+
+  getStudentSummary: async (
+    token: string,
+    studentId: string
+  ): Promise<IStudentSummary> => {
+    const response = await fetch(
+      `${API_BASE_URL}/student/${studentId}/summary`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to get student summary");
     }
     return data.data;
   },

@@ -24,6 +24,7 @@ import { useState } from "react";
 import { useRemoveStudent } from "../hooks/useRemoveStudent";
 import { EditStudentFormModal } from "../EditStudentFormModal/EditStudentFormModal";
 import { CreatePaymentFormModal } from "../CreatePaymentFormModal/CreatePaymentFormModal";
+import { useRouter } from "next/navigation";
 
 const getPaymentStatusBadge = (status: boolean) => {
   if (status) {
@@ -44,6 +45,7 @@ export default function StudentCard({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
+  const router = useRouter();
 
   const handleDelete = () => {
     removeStudent(student.id);
@@ -85,7 +87,12 @@ export default function StudentCard({
                     .join("")}
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold">{student.name}</h3>
+                  <h3
+                    className="text-lg font-semibold hover:cursor-pointer"
+                    onClick={() => router.push(`/student/${student.id}`)}
+                  >
+                    {student.name}
+                  </h3>
                   <p className="text-sm dark:text-gray-400 text-gray-600">
                     Joined {new Date(student.createdAt).toLocaleDateString()}
                   </p>

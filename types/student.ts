@@ -22,3 +22,9 @@ export interface IStudentPaymentDetails extends IStudentResponse {
   dueAmount: number;
   unpaidMonths: string[];
 }
+
+export interface IStudentSummary extends IStudentResponse {
+  unpaidMonthsCount: number;
+  totalPayments: number;
+  totalPaidAmount: number;
+}

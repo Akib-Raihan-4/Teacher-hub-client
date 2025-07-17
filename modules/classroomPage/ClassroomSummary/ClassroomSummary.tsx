@@ -99,7 +99,7 @@ export default function ClassroomSummaryWithHeader({
           </div>
           <p className="text-3xl font-bold  dark:text-yellow-400 text-blue-600 mb-4">
             {((classroomSummary?.totalRevenue ?? 0) / 1000).toFixed(2)}
-            {(classroomSummary?.lastMonth.revenue ?? 0) > 0 && "k "} bdt
+            {(classroomSummary?.totalRevenue ?? 0) > 0 && "k "} bdt
           </p>
 
           <div className="border-t  dark:border-yellow-500/20 border-blue-500/20 pt-4">
@@ -122,7 +122,7 @@ export default function ClassroomSummaryWithHeader({
           </div>
           <p className="text-3xl font-bold  dark:text-yellow-400 text-blue-600 mb-4">
             {((classroomSummary?.totalDueAmount ?? 0) / 1000).toFixed(2)}
-            {(classroomSummary?.lastMonth.revenue ?? 0) > 0 && "k "} bdt
+            {(classroomSummary?.totalDueAmount ?? 0) > 0 && "k "} bdt
           </p>
 
           <div className="border-t  dark:border-yellow-500/20 border-blue-500/20 pt-4">
@@ -132,7 +132,7 @@ export default function ClassroomSummaryWithHeader({
                 {((classroomSummary?.lastMonth.dueAmount ?? 0) / 1000).toFixed(
                   2
                 )}
-                {(classroomSummary?.lastMonth.revenue ?? 0) > 0 && "k "} bdt
+                {(classroomSummary?.lastMonth.dueAmount ?? 0) > 0 && "k "} bdt
               </span>
             </h1>
           </div>

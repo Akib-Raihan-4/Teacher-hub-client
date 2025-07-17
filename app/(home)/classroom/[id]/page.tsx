@@ -19,7 +19,7 @@ export default function Classroom(props: { params: Promise<{ id: string }> }) {
         variant={"ghost"}
       >
         <ArrowBigLeftDash className="!w-6 !h-6" />{" "}
-        <span className="text-xl"> Back to Classrooms</span>
+        <span className="text-xl"> Back To Classroom Dashboard</span>
       </Button>
       <ClassroomSummaryWithHeader classroomId={id} />
 
