@@ -4,6 +4,7 @@ import {
   IStudentSummary,
 } from "@/types/student";
 import { API_BASE_URL } from "../auth/auth";
+import { IUnpaidRecord, IUnpaidRecordResponse } from "@/types/unpaidRecord";
 
 export const studentAPI = {
   addStudent: async (
@@ -77,5 +78,68 @@ export const studentAPI = {
       throw new Error(data.message || "Failed to get student summary");
     }
     return data.data;
+  },
+
+  getUnpaidRecord: async (
+    token: string,
+    studentId: string
+  ): Promise<IUnpaidRecordResponse> => {
+    const response = await fetch(
+      `${API_BASE_URL}/student/${studentId}/unpaid-record`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to get unpaid record");
+    }
+    return data.data;
+  },
+
+  updateUnpaidRecord: async (
+    token: string,
+    studentId: string,
+    payload: IUnpaidRecord
+  ): Promise<IUnpaidRecordResponse> => {
+    const response = await fetch(
+      `${API_BASE_URL}/student/${studentId}/unpaid-record`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to update unpaid record");
+    }
+    return data.data;
+  },
+
+  deleteUnpaidRecord: async (
+    token: string,
+    studentId: string
+  ): Promise<void> => {
+    const response = await fetch(
+      `${API_BASE_URL}/student/${studentId}/unpaid-record`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to delete unpaid record");
+    }
   },
 };

@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import StudentSummary from "@/modules/studentPage/StudentSummary/StudentSummary";
+import UnpaidRecordSection from "@/modules/studentPage/UnpaidRecordSection/UnpaidRecordSection";
 import { ArrowBigLeftDash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -20,6 +21,7 @@ export default function Student(props: { params: Promise<{ id: string }> }) {
         <span className="text-xl"> Back To Classroom</span>
       </Button>
       <StudentSummary studentId={id} />
+      <UnpaidRecordSection studentId={id} />
     </>
   );
 }

@@ -1,4 +1,3 @@
-// paymentSchema (inside CreatePaymentFormModal.helpers.ts)
 import { z } from "zod";
 
 export const paymentSchema = z.object({

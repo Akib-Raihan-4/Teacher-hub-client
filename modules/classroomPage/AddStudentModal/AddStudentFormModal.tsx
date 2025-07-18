@@ -60,7 +60,7 @@ export const AddStudentFormModal = ({ classroomId }: AddStudentModalProps) => {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-2 bg-green-600 hover:bg-green-700 dark:bg-yellow-600 dark:hover:bg-yellow-700 cursor-pointer p-4 rounded-3xl sm:w-56 w-40 text-white">
+        <Button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-yellow-600 dark:hover:bg-yellow-700 cursor-pointer p-4 rounded-3xl sm:w-56 w-40 text-white">
           <Plus className="!w-5 !h-5" />
           <span className="font-bold sm:text-lg text-sm">Add Student</span>
         </Button>
