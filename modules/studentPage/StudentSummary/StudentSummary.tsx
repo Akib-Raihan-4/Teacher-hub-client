@@ -1,6 +1,6 @@
 import Loader from "@/components/shared/loader/Loader";
 
-import { AlertTriangle, Banknote, Calendar} from "lucide-react";
+import { AlertTriangle, Banknote, Calendar } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useGetStudentSummary } from "../hooks/useGetStudentSummary";
 import { format } from "date-fns";
@@ -32,11 +32,11 @@ export default function StudentSummary({ studentId }: { studentId: string }) {
       <h1 className="text-4xl font-bold">
         {studentSummary?.name.toLocaleUpperCase()}
       </h1>
-      <p className="text-gray-300 mt-2">
+      <p className="dark:text-gray-300 text-gray-500 mt-2">
         {studentSummary?.email} • {studentSummary?.parentPhone}
       </p>
 
-      <p className="text-gray-400 mt-2">
+      <p className="dark:text-gray-400 text-gray-700 mt-2">
         Joined{" "}
         {studentSummary?.createdAt
           ? format(studentSummary.createdAt, "dd MMMM yyyy")

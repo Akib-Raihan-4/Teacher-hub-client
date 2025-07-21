@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import PaymentSection from "@/modules/studentPage/PaymentSection/PaymentSection";
 import StudentSummary from "@/modules/studentPage/StudentSummary/StudentSummary";
 import UnpaidRecordSection from "@/modules/studentPage/UnpaidRecordSection/UnpaidRecordSection";
 import { ArrowBigLeftDash } from "lucide-react";
@@ -22,6 +23,9 @@ export default function Student(props: { params: Promise<{ id: string }> }) {
       </Button>
       <StudentSummary studentId={id} />
       <UnpaidRecordSection studentId={id} />
+      <h1 className="text-4xl font-bold mb-7">Payments</h1>
+      <PaymentSection studentId={id} />
+     
     </>
   );
 }

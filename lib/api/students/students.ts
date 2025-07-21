@@ -5,6 +5,7 @@ import {
 } from "@/types/student";
 import { API_BASE_URL } from "../auth/auth";
 import { IUnpaidRecord, IUnpaidRecordResponse } from "@/types/unpaidRecord";
+import { IPaymentResponse } from "@/types/payment";
 
 export const studentAPI = {
   addStudent: async (
@@ -142,4 +143,25 @@ export const studentAPI = {
       throw new Error(data.message || "Failed to delete unpaid record");
     }
   },
+
+  getPayments: async (
+    token: string,
+    studentId: string
+  ): Promise<IPaymentResponse[]> => {
+    const response = await fetch(
+      `${API_BASE_URL}/student/${studentId}/payments`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to get payments");
+    }
+    return data.data;
+  },
+  
 };

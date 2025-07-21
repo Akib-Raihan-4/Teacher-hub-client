@@ -21,4 +21,38 @@ export const paymentAPI = {
     }
     return data.data;
   },
+
+  deletePayment: async (token: string, paymentId: string): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/payment/${paymentId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to delete payment");
+    }
+  },
+
+  updatePayment: async (
+    token: string,
+    paymentId: string,
+    payload: IPaymentRequest
+  ): Promise<IPaymentResponse> => {
+    const response = await fetch(`${API_BASE_URL}/payment/${paymentId}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to update payment");
+    }
+    return data.data;
+  },
 };

@@ -82,7 +82,7 @@ export default function UnpaidRecordSection({
           </div>
 
           {/* Unpaid Records Display */}
-          <div className="space-y-4 mb-20">
+          <div className="space-y-4 mb-7">
             {unpaidData &&
             unpaidData.unpaidMonths &&
             unpaidData.unpaidMonths.length > 0 ? (

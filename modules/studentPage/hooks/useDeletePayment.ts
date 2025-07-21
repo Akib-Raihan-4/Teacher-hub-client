@@ -1,39 +1,33 @@
 import { tokenManager } from "@/lib/api/auth/token-manager";
 import { paymentAPI } from "@/lib/api/payments/payments";
-
-import { IPaymentRequest, IPaymentResponse } from "@/types/payment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useCreatePayment = (studentId: string, classroomId: string) => {
+export const useDeletePayment = (paymentId: string, studentId: string) => {
   const queryClient = useQueryClient();
-
-  return useMutation<IPaymentResponse, Error, IPaymentRequest>({
-    mutationFn: async (payload) => {
+  return useMutation<void, Error, string>({
+    mutationFn: async (paymentId: string) => {
       const token = tokenManager.getToken();
       if (!token) throw new Error("No token");
-      return paymentAPI.createPayment(token, {
-        ...payload,
-        studentId,
-      });
+      return paymentAPI.deletePayment(token, paymentId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["students", classroomId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["classroom", classroomId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["classrooms-summary"],
-      });
-      queryClient.invalidateQueries({
         queryKey: ["payments", studentId],
       });
-      toast.success("Payment created successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["student", studentId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["students"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["classroom"],
+      });
+      toast.success("Payment deleted successfully");
     },
     onError: (error: Error) => {
-      toast.error("Failed to create payment", {
+      toast.error("Failed to delete payment", {
         description: error.message,
       });
     },
