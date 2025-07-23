@@ -15,14 +15,14 @@ export const links = [
   },
   {
     label: "Classrooms",
-    href: "/dashboard/classrooms",
+    href: "/classrooms",
     icon: (
       <IconDoor className="h-6 w-6 shrink-0 text-neutral-700 dark:text-neutral-200" />
     ),
   },
   {
-    label: "Expenses",
-    href: "#",
+    label: "Finances",
+    href: "/finances",
     icon: (
       <IconMoneybag className="h-6 w-6 shrink-0 text-neutral-700 dark:text-neutral-200" />
     ),

@@ -1,8 +1,8 @@
 "use client";
 import { useAuth } from "@/lib/hooks/useAuth";
-import AllClassrooms from "@/modules/homePage/DashboardClassroomPage/AllClassrooms/AllClassrooms";
-import ClassroomsSummary from "@/modules/homePage/DashboardClassroomPage/ClassroomsSummary/ClassroomsSummary";
-import { CreateClassroomModal } from "@/modules/homePage/DashboardClassroomPage/CreateClassroomForm/CreateClassroomForm";
+import AllClassrooms from "@/modules/classroomsPage/AllClassrooms/AllClassrooms";
+import ClassroomsSummary from "@/modules/classroomsPage/ClassroomsSummary/ClassroomsSummary";
+import { CreateClassroomModal } from "@/modules/classroomsPage/CreateClassroomForm/CreateClassroomForm";
 
 export default function DashboardClassroomPage() {
   const { user } = useAuth();
