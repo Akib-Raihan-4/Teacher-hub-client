@@ -31,7 +31,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { SearchIcon, CalendarIcon, X, Pencil, Trash2 } from "lucide-react";
+import { SearchIcon, CalendarIcon, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import Loader from "@/components/shared/loader/Loader";
@@ -49,6 +49,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useDeleteExpense } from "../hooks/useDeleteExpense";
+import { EditExpenseFormModal } from "../EditExpenseFormModal.tsx/EditExpenseFormModal";
+import { Badge } from "@/components/ui/badge";
 
 export default function ExpenseTable() {
   const [page, setPage] = useState(1);
@@ -58,7 +60,7 @@ export default function ExpenseTable() {
   const [dateTo, setDateTo] = useState<Date>();
   const [activeDateFrom, setActiveDateFrom] = useState<string>();
   const [activeDateTo, setActiveDateTo] = useState<string>();
-  const limit = 1;
+  const limit = 3;
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -94,10 +96,6 @@ export default function ExpenseTable() {
     activeDateTo
   );
 
-  const handleEdit = (expense: IExpenseWithCategory) => {
-    console.log("Edit", expense);
-  };
-
   const handleDelete = () => {
     if (selectedId) {
       deleteExpense(selectedId);
@@ -110,23 +108,33 @@ export default function ExpenseTable() {
     () => [
       {
         accessorKey: "date",
-        header: () => <div className="w-[120px]">Date</div>,
+        header: () => (
+          <div className="w-[120px] pl-2 dark:text-black">Date</div>
+        ),
         cell: ({ row }) => {
-          const date = new Date(row.getValue("date"));
-          return format(date, "MMM dd, yyyy");
+          const rawDate = row.getValue("date") as string;
+          const formattedDate = format(new Date(rawDate), "MMM dd, yyyy");
+
+          return (
+            <div className="pl-2">
+              <Badge>{formattedDate}</Badge>
+            </div>
+          );
         },
       },
       {
         accessorKey: "category.name",
-        header: () => <div className="w-[140px]">Category</div>,
+        header: () => <div className="w-[140px] dark:text-black">Category</div>,
         cell: ({ row }) => row.original.category?.name || "N/A",
       },
       {
         accessorKey: "description",
-        header: () => <div className="w-[200px]">Description</div>,
+        header: () => (
+          <div className="w-[200px] dark:text-black">Description</div>
+        ),
         cell: ({ row }) => (
           <div
-            className="sm:max-w-[200px] sm:truncate sm:whitespace-nowrap whitespace-normal break-words"
+            className="sm:max-w-[200px] truncate whitespace-nowrap hover:whitespace-normal break-words py-6"
             title={row.getValue("description")}
           >
             {row.getValue("description") || "No description"}
@@ -135,7 +143,7 @@ export default function ExpenseTable() {
       },
       {
         accessorKey: "amount",
-        header: () => <div className=" text-center">Amount</div>,
+        header: () => <div className="text-center dark:text-black">Amount</div>,
         cell: ({ row }) => {
           const amount = parseFloat(row.getValue("amount"));
           return (
@@ -147,17 +155,12 @@ export default function ExpenseTable() {
       },
       {
         id: "actions",
-        header: () => <div className=" text-center">Actions</div>,
+        header: () => (
+          <div className="text-center dark:text-black">Actions</div>
+        ),
         cell: ({ row }) => (
           <div className="flex justify-center gap-2">
-            <Button
-              size="icon"
-              variant="outline"
-              className="h-8 w-8"
-              onClick={() => handleEdit(row.original)}
-            >
-              <Pencil className="h-4 w-4" />
-            </Button>
+            <EditExpenseFormModal expense={row.original} />
             <Button
               size="icon"
               variant="destructive"
@@ -199,11 +202,6 @@ export default function ExpenseTable() {
     }
   };
 
-  const clearDateFilters = () => {
-    setDateFrom(undefined);
-    setDateTo(undefined);
-  };
-
   const clearAllFilters = () => {
     setSearchTerm("");
     setDateFrom(undefined);
@@ -242,8 +240,8 @@ export default function ExpenseTable() {
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full sm:w-[140px] justify-start text-left font-normal",
-                      !dateFrom && "text-muted-foreground shadow-2xl"
+                      "w-full sm:w-[140px] justify-start text-left font-normal shadow-xl",
+                      !dateFrom && "text-muted-foreground "
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
@@ -264,8 +262,8 @@ export default function ExpenseTable() {
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full sm:w-[140px] justify-start text-left font-normal",
-                      !dateTo && "text-muted-foreground shadow-2xl"
+                      "w-full sm:w-[140px] justify-start text-left font-normal shadow-xl",
+                      !dateTo && "text-muted-foreground"
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
@@ -281,17 +279,6 @@ export default function ExpenseTable() {
                   />
                 </PopoverContent>
               </Popover>
-
-              {(dateFrom || dateTo) && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearDateFilters}
-                  className="h-10 px-2"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              )}
             </div>
 
             {hasActiveFilters && (
@@ -348,7 +335,7 @@ export default function ExpenseTable() {
               } transition-opacity shadow-2xl rounded-2xl mb-6 overflow-x-auto border`}
             >
               <Table className="w-full table-fixed min-w-[700px]">
-                <TableHeader>
+                <TableHeader className="bg-gray-200">
                   {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id}>
                       {headerGroup.headers.map((header) => (
@@ -382,7 +369,7 @@ export default function ExpenseTable() {
             </div>
 
             {/* Summary */}
-            <div className="mt-4 flex flex-col sm:flex-row justify-between gap-2 items-start sm:items-center text-sm text-muted-foreground">
+            <div className="mt-4 flex justify-between gap-2 items-start sm:items-center text-sm text-muted-foreground px-2">
               <div>
                 Showing {expenses.length} of {pagination.total} expenses
               </div>

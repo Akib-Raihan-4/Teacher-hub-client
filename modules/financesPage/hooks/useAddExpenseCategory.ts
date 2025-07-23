@@ -1,25 +1,28 @@
 import { tokenManager } from "@/lib/api/auth/token-manager";
 import { financesAPI } from "@/lib/api/finances/finances";
-import { IExpenseRequest, IExpenseResponse } from "@/types/finances";
+import {
+  IExpenseCategoryRequest,
+  IExpenseCategoryResponse,
+} from "@/types/finances";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useAddExpense = () => {
+export const useAddExpenseCategory = () => {
   const queryClient = useQueryClient();
-  return useMutation<IExpenseResponse, Error, IExpenseRequest>({
+  return useMutation<IExpenseCategoryResponse, Error, IExpenseCategoryRequest>({
     mutationFn: async (payload) => {
       const token = tokenManager.getToken();
       if (!token) throw new Error("No token");
-      return financesAPI.addExpense(token, payload);
+      return financesAPI.addExpenseCategory(token, payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["expenses"],
+        queryKey: ["expenseCategories"],
       });
-      toast.success("Expense added successfully");
+      toast.success("Expense category added successfully");
     },
     onError: (error: Error) => {
-      toast.error("Failed to add expense", {
+      toast.error("Failed to add expense category", {
         description: error.message,
       });
     },

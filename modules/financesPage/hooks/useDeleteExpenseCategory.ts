@@ -1,25 +1,24 @@
 import { tokenManager } from "@/lib/api/auth/token-manager";
 import { financesAPI } from "@/lib/api/finances/finances";
-import { IExpenseRequest, IExpenseResponse } from "@/types/finances";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useAddExpense = () => {
+export const useDeleteExpenseCategory = () => {
   const queryClient = useQueryClient();
-  return useMutation<IExpenseResponse, Error, IExpenseRequest>({
-    mutationFn: async (payload) => {
+  return useMutation<void, Error, string>({
+    mutationFn: async (expenseCategoryId: string) => {
       const token = tokenManager.getToken();
       if (!token) throw new Error("No token");
-      return financesAPI.addExpense(token, payload);
+      return financesAPI.deleteExpenseCategory(token, expenseCategoryId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["expenses"],
+        queryKey: ["expenseCategories"],
       });
-      toast.success("Expense added successfully");
+      toast.success("Expense category deleted successfully");
     },
     onError: (error: Error) => {
-      toast.error("Failed to add expense", {
+      toast.error("Failed to delete expense category", {
         description: error.message,
       });
     },

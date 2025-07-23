@@ -1,3 +1,4 @@
+import { AddExpenseFormModal } from "@/modules/financesPage/AddExpenseFormModal/AddExpenseFormModal";
 import ExpenseTable from "@/modules/financesPage/ExpenseTable/ExpenseTable";
 
 export default function FinancesPage() {
@@ -9,7 +10,10 @@ export default function FinancesPage() {
           Track your teaching income and expenses
         </p>
       </div>
-      <h1 className="text-4xl font-bold mb-8">Expenses</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-bold">Expenses</h1>
+        <AddExpenseFormModal />
+      </div>
       <ExpenseTable />
     </>
   );

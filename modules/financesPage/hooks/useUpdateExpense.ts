@@ -4,22 +4,26 @@ import { IExpenseRequest, IExpenseResponse } from "@/types/finances";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useAddExpense = () => {
+export const useUpdateExpense = () => {
   const queryClient = useQueryClient();
-  return useMutation<IExpenseResponse, Error, IExpenseRequest>({
-    mutationFn: async (payload) => {
+  return useMutation<
+    IExpenseResponse,
+    Error,
+    { expenseId: string; payload: IExpenseRequest }
+  >({
+    mutationFn: async ({ expenseId, payload }) => {
       const token = tokenManager.getToken();
       if (!token) throw new Error("No token");
-      return financesAPI.addExpense(token, payload);
+      return financesAPI.updateExpense(token, expenseId, payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["expenses"],
       });
-      toast.success("Expense added successfully");
+      toast.success("Expense updated successfully");
     },
     onError: (error: Error) => {
-      toast.error("Failed to add expense", {
+      toast.error("Failed to update expense", {
         description: error.message,
       });
     },

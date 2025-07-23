@@ -1,5 +1,4 @@
 export interface IExpenseRequest {
-  teacherId: string;
   categoryId: string;
   amount: number;
   description: string;
@@ -23,7 +22,6 @@ export interface IExpenseWithCategory extends IExpenseResponse {
 }
 
 export interface IExpenseCategoryRequest {
-  teacherId: string;
   name: string;
 }
 
