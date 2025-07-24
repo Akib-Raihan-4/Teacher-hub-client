@@ -34,34 +34,33 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
-import { useAddExpense } from "../hooks/useAddExpense";
-import { useAddExpenseCategory } from "../hooks/useAddExpenseCategory";
-import { useGetExpenseCategories } from "../hooks/useGetExpenseCategory";
-import { useDeleteExpenseCategory } from "../hooks/useDeleteExpenseCategory";
+import { useAddIncome } from "../hooks/useAddIncome";
+import { useAddIncomeSource } from "../hooks/useAddIncomeSource";
+import { useGetIncomeSources } from "../hooks/useGetIncomeSource";
+import { useDeleteIncomeSource } from "../hooks/useDeleteIncomeSource";
 
 const schema = z.object({
-  categoryId: z.string().min(1, "Category is required"),
+  incomeSourceId: z.string().min(1, "Source is required"),
   amount: z
     .number({ invalid_type_error: "Amount must be a number" })
     .positive("Amount must be greater than 0"),
   description: z.string().min(1, "Description is required"),
   date: z.date({ required_error: "Date is required" }),
-  newCategory: z.string().optional(),
+  newSource: z.string().optional(),
 });
 
-type ExpenseFormValues = z.infer<typeof schema>;
+type IncomeFormValues = z.infer<typeof schema>;
 
-export const AddExpenseFormModal = () => {
+export const AddIncomeFormModal = () => {
   const [open, setOpen] = useState(false);
-  const [addCategoryMode, setAddCategoryMode] = useState(false);
-  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [addSourceMode, setAddSourceMode] = useState(false);
+  const [sourceDropdownOpen, setSourceDropdownOpen] = useState(false);
 
-  const { data: categories = [] } = useGetExpenseCategories();
-  const { mutate: addExpense, isPending: addingExpense } = useAddExpense();
-  const { mutate: addCategory, isPending: addingCategory } =
-    useAddExpenseCategory();
-  const { mutate: deleteCategory, isPending: deletingCategory } =
-    useDeleteExpenseCategory();
+  const { data: sources = [] } = useGetIncomeSources();
+  const { mutate: addIncome, isPending: addingIncome } = useAddIncome();
+  const { mutate: addSource, isPending: addingSource } = useAddIncomeSource();
+  const { mutate: deleteSource, isPending: deletingSource } =
+    useDeleteIncomeSource();
 
   const {
     register,
@@ -71,21 +70,21 @@ export const AddExpenseFormModal = () => {
     reset,
     trigger,
     formState: { errors, isValid },
-  } = useForm<ExpenseFormValues>({
+  } = useForm<IncomeFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       amount: 0,
       description: "",
-      categoryId: "",
+      incomeSourceId: "",
       date: new Date(),
-      newCategory: "",
+      newSource: "",
     },
     mode: "onChange",
   });
 
-  const onSubmit = (data: ExpenseFormValues) => {
+  const onSubmit = (data: IncomeFormValues) => {
     const payload = {
-      categoryId: data.categoryId,
+      incomeSourceId: data.incomeSourceId,
       amount: data.amount,
       description: data.description,
       date: new Date(
@@ -97,44 +96,44 @@ export const AddExpenseFormModal = () => {
       ),
     };
 
-    addExpense(payload, {
+    addIncome(payload, {
       onSuccess: () => {
         reset();
         setOpen(false);
-        setAddCategoryMode(false);
+        setAddSourceMode(false);
       },
     });
   };
 
-  const handleAddCategory = () => {
-    const name = watch("newCategory");
+  const handleAddSource = () => {
+    const name = watch("newSource");
     if (!name) return;
 
-    addCategory(
+    addSource(
       { name },
       {
         onSuccess: (newCat) => {
-          setValue("categoryId", newCat.id, { shouldValidate: true });
-          setValue("newCategory", "");
-          setAddCategoryMode(false);
+          setValue("incomeSourceId", newCat.id, { shouldValidate: true });
+          setValue("newSource", "");
+          setAddSourceMode(false);
         },
       }
     );
   };
 
-  const handleDeleteCategory = (categoryId: string) => {
-    deleteCategory(categoryId, {
+  const handleDeleteSource = (incomeSourceId: string) => {
+    deleteSource(incomeSourceId, {
       onSuccess: () => {
-        // If the deleted category was selected, clear the selection
-        if (watch("categoryId") === categoryId) {
-          setValue("categoryId", "");
+        // If the deleted source was selected, clear the selection
+        if (watch("incomeSourceId") === incomeSourceId) {
+          setValue("incomeSourceId", "");
         }
       },
     });
   };
 
-  const selectedCategory = categories.find(
-    (cat) => cat.id === watch("categoryId")
+  const selectedSource = sources.find(
+    (cat) => cat.id === watch("incomeSourceId")
   );
 
   return (
@@ -144,51 +143,51 @@ export const AddExpenseFormModal = () => {
         setOpen(isOpen);
         if (!isOpen) {
           reset();
-          setAddCategoryMode(false);
+          setAddSourceMode(false);
         }
       }}
     >
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-yellow-600 dark:hover:bg-yellow-700 cursor-pointer p-4 rounded-3xl sm:w-56 w-40 text-white">
           <Plus className="!w-6 !h-6" />
-          <span className="font-semibold text-sm sm:text-lg">Add Expense</span>
+          <span className="font-semibold text-sm sm:text-lg">Add Income</span>
         </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[520px] p-6">
         <DialogTitle className="text-2xl font-bold text-center mb-6 bg-gradient-to-r bg-clip-text ">
-          Add New Expense
+          Add New Income
         </DialogTitle>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Category Select or Add */}
-          {!addCategoryMode ? (
+          {/* Source Select or Add */}
+          {!addSourceMode ? (
             <div className="space-y-2">
               <Label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                 <Tag className="w-4 h-4" />
-                Category
+                Source
               </Label>
 
-              {/* Custom Category Dropdown */}
+              {/* Custom Source Dropdown */}
               <Popover
-                open={categoryDropdownOpen}
-                onOpenChange={setCategoryDropdownOpen}
+                open={sourceDropdownOpen}
+                onOpenChange={setSourceDropdownOpen}
               >
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     className={cn(
                       "w-full justify-between border-2 border-gray-200 hover:border-blue-400",
-                      !watch("categoryId") && "text-gray-400"
+                      !watch("incomeSourceId") && "text-gray-400"
                     )}
                   >
                     <div className="flex items-center">
-                      {selectedCategory ? (
+                      {selectedSource ? (
                         <span className="font-medium">
-                          {selectedCategory.name}
+                          {selectedSource.name}
                         </span>
                       ) : (
-                        "Select a category"
+                        "Select a source"
                       )}
                     </div>
                     <ChevronDown className="w-4 h-4 opacity-50" />
@@ -196,26 +195,26 @@ export const AddExpenseFormModal = () => {
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0" align="start">
                   <div className="max-h-60 overflow-y-auto">
-                    {categories.length === 0 && (
-                      <p className="text-sm p-4">No categories available</p>
+                    {sources.length === 0 && (
+                      <p className="text-sm p-4">No sources available</p>
                     )}
-                    {categories.map((cat) => (
+                    {sources.map((cat) => (
                       <div
                         key={cat.id}
                         className={cn(
                           "flex items-center justify-between p-3 dark:hover:bg-gray-800 hover:bg-gray-200 cursor-pointer",
-                          watch("categoryId") === cat.id &&
+                          watch("incomeSourceId") === cat.id &&
                             "dark:bg-gray-800 bg-gray-200 "
                         )}
                         onClick={() => {
-                          setValue("categoryId", cat.id);
-                          trigger("categoryId");
-                          setCategoryDropdownOpen(false);
+                          setValue("incomeSourceId", cat.id);
+                          trigger("incomeSourceId");
+                          setSourceDropdownOpen(false);
                         }}
                       >
                         <span className="font-medium">{cat.name}</span>
                         <div className="flex items-center gap-2">
-                          {watch("categoryId") === cat.id && (
+                          {watch("incomeSourceId") === cat.id && (
                             <Check className="w-4 h-4 text-green-600" />
                           )}
                           <AlertDialog>
@@ -233,7 +232,7 @@ export const AddExpenseFormModal = () => {
                             <AlertDialogContent>
                               <AlertDialogHeader>
                                 <AlertDialogTitle>
-                                  Delete Category
+                                  Delete Source
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
                                   Are you sure you want to delete &quot;
@@ -244,11 +243,11 @@ export const AddExpenseFormModal = () => {
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
-                                  onClick={() => handleDeleteCategory(cat.id)}
+                                  onClick={() => handleDeleteSource(cat.id)}
                                   className="bg-red-600 hover:bg-red-700"
-                                  disabled={deletingCategory}
+                                  disabled={deletingSource}
                                 >
-                                  {deletingCategory ? "Deleting..." : "Delete"}
+                                  {deletingSource ? "Deleting..." : "Delete"}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
@@ -263,21 +262,21 @@ export const AddExpenseFormModal = () => {
                       variant="ghost"
                       className="w-full justify-start "
                       onClick={() => {
-                        setAddCategoryMode(true);
-                        setCategoryDropdownOpen(false);
+                        setAddSourceMode(true);
+                        setSourceDropdownOpen(false);
                       }}
                     >
                       <Plus className="w-4 h-4 mr-2" />
-                      Add new category
+                      Add new source
                     </Button>
                   </div>
                 </PopoverContent>
               </Popover>
 
-              {errors.categoryId && (
+              {errors.incomeSourceId && (
                 <p className="text-red-500 text-sm flex items-center gap-1 mt-1">
                   <X className="w-3 h-3" />
-                  {errors.categoryId.message}
+                  {errors.incomeSourceId.message}
                 </p>
               )}
             </div>
@@ -285,12 +284,12 @@ export const AddExpenseFormModal = () => {
             <div className="space-y-3">
               <Label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                 <Tag className="w-4 h-4" />
-                New Category Name
+                New Source Name
               </Label>
               <div className="relative">
                 <Input
-                  placeholder="Enter category name"
-                  {...register("newCategory")}
+                  placeholder="Enter source name"
+                  {...register("newSource")}
                   className="border-2 border-gray-200 focus:border-blue-400 transition-colors pl-10"
                 />
                 <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -298,19 +297,19 @@ export const AddExpenseFormModal = () => {
               <div className="flex gap-2">
                 <Button
                   type="button"
-                  onClick={handleAddCategory}
-                  disabled={addingCategory || !watch("newCategory")}
+                  onClick={handleAddSource}
+                  disabled={addingSource || !watch("newSource")}
                   className="bg-green-600 hover:bg-green-700 flex-1"
                 >
-                  {addingCategory ? "Adding..." : "Add Category"}
+                  {addingSource ? "Adding..." : "Add Source"}
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   className="flex-1"
                   onClick={() => {
-                    setAddCategoryMode(false);
-                    setValue("newCategory", "");
+                    setAddSourceMode(false);
+                    setValue("newSource", "");
                   }}
                 >
                   Cancel
@@ -350,7 +349,7 @@ export const AddExpenseFormModal = () => {
               Description
             </Label>
             <textarea
-              placeholder="What was this expense for?"
+              placeholder="What was this income for?"
               {...register("description")}
               className="border-2 rounded-2xl p-4 border-gray-200 focus:border-blue-400 transition-colors w-full"
             />
@@ -398,10 +397,10 @@ export const AddExpenseFormModal = () => {
           <div className="flex justify-end gap-3 pt-6 border-t">
             <Button
               type="submit"
-              disabled={!isValid || addingExpense}
+              disabled={!isValid || addingIncome}
               className="px-6"
             >
-              {addingExpense ? "Adding..." : "Add Expense"}
+              {addingIncome ? "Adding..." : "Add Income"}
             </Button>
             <Button
               variant="destructive"
@@ -409,7 +408,7 @@ export const AddExpenseFormModal = () => {
               onClick={() => {
                 setOpen(false);
                 reset();
-                setAddCategoryMode(false);
+                setAddSourceMode(false);
               }}
               className="px-6"
             >

@@ -31,7 +31,6 @@ export interface IExpenseCategoryResponse {
 }
 
 export interface IIncomeRequest {
-  teacherId: string;
   incomeSourceId: string;
   amount: number;
   description: string;
@@ -48,8 +47,13 @@ export interface IIncomeResponse {
   createdAt: Date;
 }
 
+export interface IIncomeWithSource extends IIncomeResponse {
+  source: {
+    name: string;
+  };
+}
+
 export interface IIncomeSourceRequest {
-  teacherId: string;
   name: string;
 }
 

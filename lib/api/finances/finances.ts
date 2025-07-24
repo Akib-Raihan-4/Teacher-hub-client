@@ -8,6 +8,7 @@ import {
   IIncomeResponse,
   IIncomeSourceRequest,
   IIncomeSourceResponse,
+  IIncomeWithSource,
 } from "@/types/finances";
 import { API_BASE_URL } from "../auth/auth";
 import { PaginatedResponse, PaginationParams } from "@/types/pagination";
@@ -188,8 +189,32 @@ export const financesAPI = {
     return data.data;
   },
 
-  getTeacherIncome: async (token: string): Promise<IIncomeResponse[]> => {
-    const response = await fetch(`${API_BASE_URL}/income`, {
+  getTeacherIncome: async (
+    token: string,
+    paginationParams?: PaginationParams,
+    searchTerm?: string,
+    dateFrom?: string,
+    dateTo?: string
+  ): Promise<PaginatedResponse<IIncomeWithSource[]>> => {
+    const url = new URL(`${API_BASE_URL}/income`);
+
+    if (paginationParams?.page) {
+      url.searchParams.append("page", paginationParams.page.toString());
+    }
+    if (paginationParams?.limit) {
+      url.searchParams.append("limit", paginationParams.limit.toString());
+    }
+    if (searchTerm) {
+      url.searchParams.append("searchTerm", searchTerm);
+    }
+    if (dateFrom) {
+      url.searchParams.append("dateFrom", dateFrom);
+    }
+    if (dateTo) {
+      url.searchParams.append("dateTo", dateTo);
+    }
+
+    const response = await fetch(url.toString(), {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -200,10 +225,10 @@ export const financesAPI = {
     if (!response.ok || !data.success) {
       throw new Error(data.message || "Failed to get teacher income");
     }
-    return data.data;
+    return { data: data.data, pagination: data.pagination };
   },
 
-  upadateIncome: async (
+  updateIncome: async (
     token: string,
     incomeId: string,
     payload: IIncomeRequest

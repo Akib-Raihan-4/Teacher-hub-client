@@ -22,6 +22,13 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "modules/classroomPage/CreatePaymentFormModal"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "modules/classroomPage/CreatePaymentFormModal",
+    "modules/financesPage/EditExpenseFormModal"
+  ],
   "exclude": ["node_modules"]
 }

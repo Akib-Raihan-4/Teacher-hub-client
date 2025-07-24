@@ -35,9 +35,9 @@ import { SearchIcon, CalendarIcon, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import Loader from "@/components/shared/loader/Loader";
-import { useGetExpenses } from "../hooks/useGetExpenses";
+import { useGetIncomes } from "../hooks/useGetIncomes";
 import { useDebounce } from "@/modules/classroomPage/hooks/useDebounce";
-import { IExpenseWithCategory } from "@/types/finances";
+import { IIncomeWithSource } from "@/types/finances";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -48,11 +48,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useDeleteExpense } from "../hooks/useDeleteExpense";
-import { EditExpenseFormModal } from "../EditExpenseFormModal/EditExpenseFormModal";
+import { useDeleteIncome } from "../hooks/useDeleteIncome";
+import { EditIncomeFormModal } from "../EditIncomeFormModal/EditIncomeFormModal";
 import { Badge } from "@/components/ui/badge";
 
-export default function ExpenseTable() {
+export default function IncomeTable() {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeSearch, setActiveSearch] = useState("");
@@ -67,7 +67,7 @@ export default function ExpenseTable() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const { mutate: deleteExpense, isPending } = useDeleteExpense();
+  const { mutate: deleteIncome, isPending } = useDeleteIncome();
 
   useEffect(() => {
     setPage(1);
@@ -89,7 +89,7 @@ export default function ExpenseTable() {
     isLoading,
     error,
     isFetching,
-  } = useGetExpenses(
+  } = useGetIncomes(
     { page, limit },
     activeSearch,
     activeDateFrom,
@@ -98,13 +98,13 @@ export default function ExpenseTable() {
 
   const handleDelete = () => {
     if (selectedId) {
-      deleteExpense(selectedId);
+      deleteIncome(selectedId);
       setSelectedId(null);
       setIsDeleteDialogOpen(false);
     }
   };
 
-  const columns = useMemo<ColumnDef<IExpenseWithCategory>[]>(
+  const columns = useMemo<ColumnDef<IIncomeWithSource>[]>(
     () => [
       {
         accessorKey: "date",
@@ -123,9 +123,9 @@ export default function ExpenseTable() {
         },
       },
       {
-        accessorKey: "category.name",
-        header: () => <div className="w-[140px] dark:text-black">Category</div>,
-        cell: ({ row }) => row.original.category?.name || "N/A",
+        accessorKey: "source.name",
+        header: () => <div className="w-[140px] dark:text-black">Source</div>,
+        cell: ({ row }) => row.original.source?.name || "N/A",
       },
       {
         accessorKey: "description",
@@ -160,7 +160,7 @@ export default function ExpenseTable() {
         ),
         cell: ({ row }) => (
           <div className="flex justify-center gap-2">
-            <EditExpenseFormModal expense={row.original} />
+            <EditIncomeFormModal income={row.original} />
             <Button
               size="icon"
               variant="destructive"
@@ -179,7 +179,7 @@ export default function ExpenseTable() {
     []
   );
 
-  const expenses = response?.data || [];
+  const incomes = response?.data || [];
   const pagination = response?.pagination || {
     total: 0,
     totalPages: 0,
@@ -189,7 +189,7 @@ export default function ExpenseTable() {
   };
 
   const table = useReactTable({
-    data: expenses,
+    data: incomes,
     columns,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
@@ -227,7 +227,7 @@ export default function ExpenseTable() {
             <div className="relative flex-1 w-full sm:max-w-md">
               <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by category..."
+                placeholder="Search by source..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 border-2 shadow-xl h-10 w-full"
@@ -297,7 +297,7 @@ export default function ExpenseTable() {
             <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
               {activeSearch && (
                 <span className="bg-secondary px-2 py-1 rounded">
-                  Category: &quot;{activeSearch}&quot;
+                  Source: &quot;{activeSearch}&quot;
                 </span>
               )}
               {activeDateFrom && (
@@ -319,12 +319,12 @@ export default function ExpenseTable() {
           <div className="flex justify-center items-center min-h-[10rem]">
             <Loader />
           </div>
-        ) : expenses.length === 0 ? (
+        ) : incomes.length === 0 ? (
           <div className="flex justify-center items-center min-h-[20rem]">
             <p className="text-gray-500">
               {hasActiveFilters
-                ? "No expenses found matching your filters"
-                : "No expenses recorded"}
+                ? "No incomes found matching your filters"
+                : "No incomes recorded"}
             </p>
           </div>
         ) : (
@@ -371,12 +371,12 @@ export default function ExpenseTable() {
             {/* Summary */}
             <div className="mt-4 flex justify-between gap-2 items-start sm:items-center text-sm text-muted-foreground px-2">
               <div>
-                Showing {expenses.length} of {pagination.total} expenses
+                Showing {incomes.length} of {pagination.total} incomes
               </div>
               <div className="font-medium">
                 Total: $
-                {expenses
-                  .reduce((sum, expense) => sum + expense.amount, 0)
+                {incomes
+                  .reduce((sum, income) => sum + income.amount, 0)
                   .toFixed(2)}
               </div>
             </div>
@@ -513,11 +513,11 @@ export default function ExpenseTable() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Are you sure you want to delete this expense?
+              Are you sure you want to delete this income?
             </AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. It will permanently delete the
-              expense from your records.
+              income from your records.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

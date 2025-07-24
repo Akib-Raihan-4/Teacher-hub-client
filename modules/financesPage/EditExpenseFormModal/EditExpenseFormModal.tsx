@@ -206,7 +206,7 @@ export const EditExpenseFormModal = ({
             <Label>Description</Label>
             <textarea
               {...register("description")}
-              className="border-2 rounded-xl w-full p-2"
+              className="border-2 rounded-xl w-full p-4"
               placeholder="What was this expense for?"
             />
             {errors.description && (
