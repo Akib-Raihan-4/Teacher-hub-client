@@ -1,0 +1,12 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    container_name: teacher-hub-frontend-prod
+    image: teacher-hub-frontend-prod
+    ports:
+      - "3000:3000"
+    env_file: .env.production
+    restart: unless-stopped

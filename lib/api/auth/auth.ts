@@ -6,7 +6,7 @@ import {
   RegisterCredentials,
 } from "@/types/auth";
 
-export const API_BASE_URL = "http://localhost:5000/api";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const authAPI = {
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
