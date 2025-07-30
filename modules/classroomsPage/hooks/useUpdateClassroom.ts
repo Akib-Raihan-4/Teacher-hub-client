@@ -7,7 +7,7 @@ import {
 } from "@/types/classroom";
 import { toast } from "sonner";
 
-export const useUpdateClassroom = () => {
+export const useUpdateClassroom = (classroomId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation<
@@ -28,6 +28,9 @@ export const useUpdateClassroom = () => {
       queryClient.invalidateQueries({
         queryKey: ["classrooms-summary"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["classroom", classroomId],
+      })
       toast.success("Classroom updated successfully");
     },
     onError: (error: Error) => {
