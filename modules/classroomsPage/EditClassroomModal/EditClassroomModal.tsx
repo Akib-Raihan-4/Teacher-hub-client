@@ -36,7 +36,11 @@ export const EditClassroomModal = ({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) => {
-  const { mutate: updateClassroom, isPending, error } = useUpdateClassroom(classroom.id);
+  const {
+    mutate: updateClassroom,
+    isPending,
+    error,
+  } = useUpdateClassroom(classroom.id);
 
   const {
     register,

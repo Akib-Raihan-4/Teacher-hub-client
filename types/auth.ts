@@ -11,7 +11,8 @@ export interface LoginResponse {
   message: string;
   data: {
     user: User;
-    token: string;
+    accessToken: string;
+    refreshToken: string;
   };
 }
 
@@ -19,7 +20,8 @@ export interface RefreshResponse {
   success: boolean;
   message: string;
   data: {
-    token: string;
+    accessToken: string;
+    refreshToken: string;
   };
 }
 

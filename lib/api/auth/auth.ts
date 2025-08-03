@@ -1,3 +1,4 @@
+import { fetchWithAuth } from "@/lib/hooks/fetchWithAuth";
 import {
   LoginCredentials,
   LoginResponse,
@@ -20,7 +21,7 @@ export const authAPI = {
 
     const data = await response.json();
 
-    if (!response.ok || !data.success) {
+    if (!response.ok) {
       throw new Error(data.message || "Login failed");
     }
 
@@ -40,45 +41,45 @@ export const authAPI = {
 
     const data = await response.json();
 
-    if (!response.ok || !data.success) {
+    if (!response.ok) {
       throw new Error(data.message || "Registration failed");
     }
 
     return data;
   },
 
-  refreshToken: async (token: string): Promise<RefreshResponse> => {
+  refreshToken: async (refreshToken: string): Promise<RefreshResponse> => {
     const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ refreshToken }),
     });
 
     const data = await response.json();
 
-    if (!response.ok || !data.success) {
-      throw new Error(data.message || "Registration failed");
+    if (!response.ok) {
+      throw new Error(data.message || "Token refresh failed");
     }
 
     return data;
   },
 
-  getProfile: async (token: string): Promise<ProfileResponse> => {
-    const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+  getProfile: async (): Promise<ProfileResponse> => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/auth/profile`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
 
     const data = await response.json();
 
-    if (!response.ok || !data.success) {
-      throw new Error(data.message || "Registration failed");
+    if (!response.ok) {
+      throw new Error(data.message || "Fetching profile failed");
     }
+
     return data;
   },
 };

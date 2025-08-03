@@ -8,7 +8,7 @@ export const useDeleteClassroom = () => {
 
   return useMutation<void, Error, string>({
     mutationFn: async (classroomId) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
 
       return classroomAPI.deleteClassroom(token, classroomId);

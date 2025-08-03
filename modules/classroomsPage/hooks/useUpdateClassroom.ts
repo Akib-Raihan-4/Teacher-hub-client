@@ -16,7 +16,7 @@ export const useUpdateClassroom = (classroomId: string) => {
     { classroomId: string; payload: IClassroomRequest }
   >({
     mutationFn: async ({ classroomId, payload }) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
 
       return classroomAPI.updateClassroom(token, classroomId, payload);
@@ -30,7 +30,8 @@ export const useUpdateClassroom = (classroomId: string) => {
       });
       queryClient.invalidateQueries({
         queryKey: ["classroom", classroomId],
-      })
+      });
+
       toast.success("Classroom updated successfully");
     },
     onError: (error: Error) => {

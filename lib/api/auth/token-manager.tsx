@@ -1,20 +1,37 @@
 import { User } from "@/types/auth";
 
 export const tokenManager = {
-  getToken: (): string | null => {
+  getAccessToken: (): string | null => {
     if (typeof window === "undefined") return null;
-    return localStorage.getItem("auth_token");
+    return localStorage.getItem("access_token");
   },
 
-  setToken: (token: string): void => {
+  setAccessToken: (token: string): void => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("auth_token", token);
+      localStorage.setItem("access_token", token);
     }
   },
 
-  removeToken: (): void => {
+  removeAccessToken: (): void => {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("auth_token");
+      localStorage.removeItem("access_token");
+    }
+  },
+
+  getRefreshToken: (): string | null => {
+    if (typeof window === "undefined") return null;
+    return localStorage.getItem("refresh_token");
+  },
+
+  setRefreshToken: (token: string): void => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("refresh_token", token);
+    }
+  },
+
+  removeRefreshToken: (): void => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("refresh_token");
     }
   },
 
@@ -34,9 +51,13 @@ export const tokenManager = {
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
       return Date.now() >= payload.exp * 1000;
-      
     } catch {
       return true;
     }
+  },
+
+  clearTokens: (): void => {
+    tokenManager.removeAccessToken();
+    tokenManager.removeRefreshToken();
   },
 };

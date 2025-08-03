@@ -12,7 +12,7 @@ export const useCreateClassroom = () => {
 
   return useMutation<IClassroomExtendedResponse, Error, IClassroomRequest>({
     mutationFn: async (payload) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
 
       if (!token) throw new Error("No token");
 

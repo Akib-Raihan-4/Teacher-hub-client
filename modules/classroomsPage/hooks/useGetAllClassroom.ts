@@ -6,15 +6,15 @@ import { useAuth } from "@/lib/hooks/useAuth";
 import { tokenManager } from "@/lib/api/auth/token-manager";
 
 export const useGetAllClassrooms = () => {
-  const { hasValidToken } = useAuth();
+  const { hasValidAccessToken } = useAuth();
   return useQuery<IClassroomExtendedResponse[], Error>({
     queryKey: ["classrooms"],
     queryFn: () => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return classroomAPI.getAllClassrooms(token);
     },
-    enabled: hasValidToken(),
+    enabled: hasValidAccessToken(),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });

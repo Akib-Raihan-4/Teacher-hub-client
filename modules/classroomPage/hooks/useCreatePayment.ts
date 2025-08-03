@@ -10,7 +10,7 @@ export const useCreatePayment = (studentId: string, classroomId: string) => {
 
   return useMutation<IPaymentResponse, Error, IPaymentRequest>({
     mutationFn: async (payload) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return paymentAPI.createPayment(token, {
         ...payload,

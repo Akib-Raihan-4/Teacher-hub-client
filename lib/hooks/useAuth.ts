@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { User, LoginCredentials, RegisterCredentials } from "@/types/auth";
 import { tokenManager } from "../api/auth/token-manager";
@@ -15,28 +15,25 @@ export const useAuth = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const hasValidToken = () => {
-    const token = tokenManager.getToken();
-    return Boolean(token && !tokenManager.isTokenExpired(token));
-  };
+  const accessToken = tokenManager.getAccessToken();
 
+  const hasValidAccessToken = useCallback(() => {
+    return Boolean(accessToken && !tokenManager.isTokenExpired(accessToken));
+  }, [accessToken]);
+  // ----------------------- GET PROFILE -----------------------
   const {
     data: profileData,
     isLoading: isProfileLoading,
     isError: isProfileError,
   } = useQuery({
     queryKey: ["user-profile"],
-    queryFn: async () => {
-      const token = tokenManager.getToken();
-      if (!token) throw new Error("No token");
-      return authAPI.getProfile(token);
-    },
-    enabled: hasValidToken(),
+    queryFn: async () => authAPI.getProfile(),
+    enabled: !!tokenManager.getRefreshToken(), // only try if refreshToken exists
     retry: false,
   });
 
   useEffect(() => {
-    if (hasValidToken()) {
+    if (hasValidAccessToken()) {
       if (profileData?.success) {
         setUser(profileData.data.user);
         setIsInitialized(true);
@@ -48,31 +45,15 @@ export const useAuth = () => {
       setUser(null);
       setIsInitialized(true);
     }
-  }, [profileData, isProfileError]);
+  }, [profileData, isProfileError, hasValidAccessToken]);
 
-  const { data: refreshData } = useQuery({
-    queryKey: ["refresh-token"],
-    queryFn: async () => {
-      const token = tokenManager.getToken();
-      if (!token) throw new Error("No token");
-      return authAPI.refreshToken(token);
-    },
-    enabled: hasValidToken(),
-    refetchInterval: 5 * 60 * 1000,
-    retry: false,
-  });
-
-  useEffect(() => {
-    if (refreshData?.success) {
-      tokenManager.setToken(refreshData.data.token);
-    }
-  }, [refreshData]);
-
+  // ----------------------- LOGIN -----------------------
   const loginMutation = useMutation({
     mutationFn: authAPI.login,
     onSuccess: (data) => {
       if (data.success) {
-        tokenManager.setToken(data.data.token);
+        tokenManager.setAccessToken(data.data.accessToken);
+        tokenManager.setRefreshToken(data.data.refreshToken);
         setUser(data.data.user);
         queryClient.invalidateQueries({ queryKey: ["refresh-token"] });
         queryClient.invalidateQueries({ queryKey: ["user-profile"] });
@@ -85,11 +66,13 @@ export const useAuth = () => {
     },
   });
 
+  // ----------------------- REGISTER -----------------------
   const registerMutation = useMutation({
     mutationFn: authAPI.register,
     onSuccess: (data) => {
       if (data.success) {
-        tokenManager.setToken(data.data.token);
+        tokenManager.setAccessToken(data.data.accessToken);
+        tokenManager.setRefreshToken(data.data.refreshToken);
         setUser(data.data.user);
         queryClient.invalidateQueries({ queryKey: ["refresh-token"] });
         queryClient.invalidateQueries({ queryKey: ["user-profile"] });
@@ -103,7 +86,7 @@ export const useAuth = () => {
   });
 
   const logout = () => {
-    tokenManager.removeToken();
+    tokenManager.clearTokens();
     setUser(null);
     queryClient.clear();
     toast.success("Logged out successfully");
@@ -124,7 +107,7 @@ export const useAuth = () => {
 
   return {
     user,
-    hasValidToken,
+    hasValidAccessToken,
     isAuthenticated: !!user,
     isInitialized,
     login,
