@@ -7,7 +7,7 @@ export const useDeletePayment = (paymentId: string, studentId: string) => {
   const queryClient = useQueryClient();
   return useMutation<void, Error, string>({
     mutationFn: async (paymentId: string) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return paymentAPI.deletePayment(token, paymentId);
     },

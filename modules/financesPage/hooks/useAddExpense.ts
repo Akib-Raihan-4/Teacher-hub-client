@@ -8,7 +8,7 @@ export const useAddExpense = () => {
   const queryClient = useQueryClient();
   return useMutation<IExpenseResponse, Error, IExpenseRequest>({
     mutationFn: async (payload) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return financesAPI.addExpense(token, payload);
     },

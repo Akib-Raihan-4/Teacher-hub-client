@@ -1,12 +1,13 @@
 import { IUnpaidRecord, IUnpaidRecordResponse } from "@/types/unpaidRecord";
 import { API_BASE_URL } from "../auth/auth";
+import { fetchWithAuth } from "@/lib/hooks/fetchWithAuth";
 
 export const unpaidRecordAPI = {
   addUnpaidRecord: async (
     token: string,
     payload: IUnpaidRecord
   ): Promise<IUnpaidRecordResponse> => {
-    const response = await fetch(`${API_BASE_URL}/unpaid-record`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/unpaid-record`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

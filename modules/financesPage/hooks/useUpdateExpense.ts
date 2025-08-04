@@ -12,7 +12,7 @@ export const useUpdateExpense = () => {
     { expenseId: string; payload: IExpenseRequest }
   >({
     mutationFn: async ({ expenseId, payload }) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return financesAPI.updateExpense(token, expenseId, payload);
     },

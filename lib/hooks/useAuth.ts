@@ -86,6 +86,7 @@ export const useAuth = () => {
   });
 
   const logout = () => {
+    authAPI.logOut(tokenManager.getRefreshToken() || "");
     tokenManager.clearTokens();
     setUser(null);
     queryClient.clear();

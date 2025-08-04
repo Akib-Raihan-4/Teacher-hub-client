@@ -5,15 +5,15 @@ import { IIncomeSourceResponse } from "@/types/finances";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetIncomeSources = () => {
-  const { hasValidToken } = useAuth();
+  const { hasValidAccessToken } = useAuth();
   return useQuery<IIncomeSourceResponse[], Error>({
     queryKey: ["incomeSources"],
     queryFn: async () => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return financesAPI.getTeacherIncomeSources(token);
     },
-    enabled: hasValidToken(),
+    enabled: hasValidAccessToken(),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });

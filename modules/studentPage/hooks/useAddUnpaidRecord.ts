@@ -8,7 +8,7 @@ export const useAddUnpaidRecord = (studentId: string) => {
   const queryClient = useQueryClient();
   return useMutation<IUnpaidRecordResponse, Error, IUnpaidRecord>({
     mutationFn: async (payload) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return await unpaidRecordAPI.addUnpaidRecord(token, {
         ...payload,

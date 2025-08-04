@@ -12,7 +12,7 @@ export const useUpdateStudent = (classroomId: string) => {
     { studentId: string; payload: IStudentRequest }
   >({
     mutationFn: async ({ studentId, payload }) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return studentAPI.updateStudent(token, studentId, payload);
     },

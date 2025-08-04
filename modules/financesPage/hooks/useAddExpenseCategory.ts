@@ -11,7 +11,7 @@ export const useAddExpenseCategory = () => {
   const queryClient = useQueryClient();
   return useMutation<IExpenseCategoryResponse, Error, IExpenseCategoryRequest>({
     mutationFn: async (payload) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return financesAPI.addExpenseCategory(token, payload);
     },

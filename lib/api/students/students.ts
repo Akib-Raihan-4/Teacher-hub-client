@@ -6,13 +6,14 @@ import {
 import { API_BASE_URL } from "../auth/auth";
 import { IUnpaidRecord, IUnpaidRecordResponse } from "@/types/unpaidRecord";
 import { IPaymentResponse } from "@/types/payment";
+import { fetchWithAuth } from "@/lib/hooks/fetchWithAuth";
 
 export const studentAPI = {
   addStudent: async (
     token: string,
     payload: IStudentRequest
   ): Promise<IStudentPaymentDetails> => {
-    const response = await fetch(`${API_BASE_URL}/student`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/student`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -28,7 +29,7 @@ export const studentAPI = {
   },
 
   removeStudent: async (token: string, studentId: string): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/student/${studentId}`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/student/${studentId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,7 +47,7 @@ export const studentAPI = {
     studentId: string,
     payload: IStudentRequest
   ): Promise<IStudentPaymentDetails> => {
-    const response = await fetch(`${API_BASE_URL}/student/${studentId}`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/student/${studentId}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -65,7 +66,7 @@ export const studentAPI = {
     token: string,
     studentId: string
   ): Promise<IStudentSummary> => {
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${API_BASE_URL}/student/${studentId}/summary`,
       {
         headers: {
@@ -85,7 +86,7 @@ export const studentAPI = {
     token: string,
     studentId: string
   ): Promise<IUnpaidRecordResponse> => {
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${API_BASE_URL}/student/${studentId}/unpaid-record`,
       {
         headers: {
@@ -106,7 +107,7 @@ export const studentAPI = {
     studentId: string,
     payload: IUnpaidRecord
   ): Promise<IUnpaidRecordResponse> => {
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${API_BASE_URL}/student/${studentId}/unpaid-record`,
       {
         method: "PATCH",
@@ -128,7 +129,7 @@ export const studentAPI = {
     token: string,
     studentId: string
   ): Promise<void> => {
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${API_BASE_URL}/student/${studentId}/unpaid-record`,
       {
         method: "DELETE",
@@ -148,7 +149,7 @@ export const studentAPI = {
     token: string,
     studentId: string
   ): Promise<IPaymentResponse[]> => {
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${API_BASE_URL}/student/${studentId}/payments`,
       {
         headers: {

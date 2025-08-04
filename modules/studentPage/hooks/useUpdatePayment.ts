@@ -12,7 +12,7 @@ export const useUpdatePayment = (studentId: string) => {
     { paymentId: string; payload: IPaymentRequest }
   >({
     mutationFn: async ({ paymentId, payload }) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return paymentAPI.updatePayment(token, paymentId, payload);
     },

@@ -8,7 +8,7 @@ export const useAddStudent = (classroomId: string) => {
   const queryClient = useQueryClient();
   return useMutation<IStudentPaymentDetails, Error, IStudentRequest>({
     mutationFn: async (payload) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return studentAPI.addStudent(token, {
         ...payload,

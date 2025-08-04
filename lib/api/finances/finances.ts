@@ -12,6 +12,7 @@ import {
 } from "@/types/finances";
 import { API_BASE_URL } from "../auth/auth";
 import { PaginatedResponse, PaginationParams } from "@/types/pagination";
+import { fetchWithAuth } from "@/lib/hooks/fetchWithAuth";
 
 export const financesAPI = {
   //  EXPENSES FETCHING
@@ -19,7 +20,7 @@ export const financesAPI = {
     token: string,
     payload: IExpenseRequest
   ): Promise<IExpenseResponse> => {
-    const response = await fetch(`${API_BASE_URL}/expense`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/expense`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -59,7 +60,7 @@ export const financesAPI = {
       url.searchParams.append("dateTo", dateTo);
     }
 
-    const response = await fetch(url.toString(), {
+    const response = await fetchWithAuth(url.toString(), {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -78,14 +79,17 @@ export const financesAPI = {
     expenseId: string,
     payload: IExpenseRequest
   ): Promise<IExpenseResponse> => {
-    const response = await fetch(`${API_BASE_URL}/expense/${expenseId}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    const response = await fetchWithAuth(
+      `${API_BASE_URL}/expense/${expenseId}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
     const data = await response.json();
     if (!response.ok || !data.success) {
       throw new Error(data.message || "Failed to update expense");
@@ -95,13 +99,16 @@ export const financesAPI = {
 
   deleteExpense: async (token: string, expenseId: string): Promise<void> => {
     console.log("delete expense", expenseId);
-    const response = await fetch(`${API_BASE_URL}/expense/${expenseId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetchWithAuth(
+      `${API_BASE_URL}/expense/${expenseId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await response.json();
     if (!response.ok || !data.success) {
       throw new Error(data.message || "Failed to delete expense");
@@ -114,7 +121,7 @@ export const financesAPI = {
     token: string,
     payload: IExpenseCategoryRequest
   ): Promise<IExpenseCategoryResponse> => {
-    const response = await fetch(`${API_BASE_URL}/expense-category`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/expense-category`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -132,7 +139,7 @@ export const financesAPI = {
   getTeacherExpenseCategories: async (
     token: string
   ): Promise<IExpenseCategoryResponse[]> => {
-    const response = await fetch(`${API_BASE_URL}/expense-category`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/expense-category`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -152,7 +159,7 @@ export const financesAPI = {
     token: string,
     expenseCategoryId: string
   ): Promise<void> => {
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${API_BASE_URL}/expense-category/${expenseCategoryId}`,
       {
         method: "DELETE",
@@ -174,7 +181,7 @@ export const financesAPI = {
     token: string,
     payload: IIncomeRequest
   ): Promise<IIncomeResponse> => {
-    const response = await fetch(`${API_BASE_URL}/income`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/income`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -214,7 +221,7 @@ export const financesAPI = {
       url.searchParams.append("dateTo", dateTo);
     }
 
-    const response = await fetch(url.toString(), {
+    const response = await fetchWithAuth(url.toString(), {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -233,7 +240,7 @@ export const financesAPI = {
     incomeId: string,
     payload: IIncomeRequest
   ): Promise<IIncomeResponse> => {
-    const response = await fetch(`${API_BASE_URL}/income/${incomeId}`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/income/${incomeId}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -249,7 +256,7 @@ export const financesAPI = {
   },
 
   deleteIncome: async (token: string, incomeId: string): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/income/${incomeId}`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/income/${incomeId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -268,7 +275,7 @@ export const financesAPI = {
     token: string,
     payload: IIncomeSourceRequest
   ): Promise<IIncomeSourceResponse> => {
-    const response = await fetch(`${API_BASE_URL}/income-source`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/income-source`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -286,7 +293,7 @@ export const financesAPI = {
   getTeacherIncomeSources: async (
     token: string
   ): Promise<IIncomeSourceResponse[]> => {
-    const response = await fetch(`${API_BASE_URL}/income-source`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/income-source`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -304,7 +311,7 @@ export const financesAPI = {
     token: string,
     incomeSourceId: string
   ): Promise<void> => {
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${API_BASE_URL}/income-source/${incomeSourceId}`,
       {
         method: "DELETE",

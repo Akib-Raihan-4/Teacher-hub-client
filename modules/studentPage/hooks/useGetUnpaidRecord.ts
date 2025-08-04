@@ -5,15 +5,15 @@ import { IUnpaidRecordResponse } from "@/types/unpaidRecord";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetUnpaidRecord = (studentId: string) => {
-  const { hasValidToken } = useAuth();
+  const { hasValidAccessToken } = useAuth();
   return useQuery<IUnpaidRecordResponse, Error>({
     queryKey: ["unpaid-record", studentId],
     queryFn: async () => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return studentAPI.getUnpaidRecord(token, studentId);
     },
-    enabled: hasValidToken(),
+    enabled: hasValidAccessToken(),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });

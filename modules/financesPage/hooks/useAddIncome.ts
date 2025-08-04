@@ -8,7 +8,7 @@ export const useAddIncome = () => {
   const queryClient = useQueryClient();
   return useMutation<IIncomeResponse, Error, IIncomeRequest>({
     mutationFn: async (payload) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return financesAPI.addIncome(token, payload);
     },

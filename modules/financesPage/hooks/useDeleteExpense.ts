@@ -7,7 +7,7 @@ export const useDeleteExpense = () => {
   const queryClient = useQueryClient();
   return useMutation<void, Error, string>({
     mutationFn: async (expenseId: string) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return financesAPI.deleteExpense(token, expenseId);
     },

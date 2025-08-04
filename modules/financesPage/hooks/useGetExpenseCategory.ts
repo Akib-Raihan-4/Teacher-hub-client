@@ -5,15 +5,15 @@ import { IExpenseCategoryResponse } from "@/types/finances";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetExpenseCategories = () => {
-  const { hasValidToken } = useAuth();
+  const { hasValidAccessToken } = useAuth();
   return useQuery<IExpenseCategoryResponse[], Error>({
     queryKey: ["expenseCategories"],
     queryFn: async () => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return financesAPI.getTeacherExpenseCategories(token);
     },
-    enabled: hasValidToken(),
+    enabled: hasValidAccessToken(),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });

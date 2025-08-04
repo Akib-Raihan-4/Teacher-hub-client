@@ -10,7 +10,7 @@ export const useGetStudentsByClassroom = (
   paginationParams?: { page?: number; limit?: number },
   search?: string
 ) => {
-  const { hasValidToken } = useAuth();
+  const { hasValidAccessToken } = useAuth();
 
   return useQuery<PaginatedResponse<IStudentPaymentDetails[]>, Error>({
     queryKey: [
@@ -21,7 +21,7 @@ export const useGetStudentsByClassroom = (
       search,
     ],
     queryFn: async () => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return classroomAPI.getStudentsByClassroom(
         token,
@@ -30,7 +30,7 @@ export const useGetStudentsByClassroom = (
         search
       );
     },
-    enabled: hasValidToken(),
+    enabled: hasValidAccessToken(),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });

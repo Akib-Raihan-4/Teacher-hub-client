@@ -12,7 +12,7 @@ export const useUpdateIncome = () => {
     { incomeId: string; payload: IIncomeRequest }
   >({
     mutationFn: async ({ incomeId, payload }) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return financesAPI.updateIncome(token, incomeId, payload);
     },

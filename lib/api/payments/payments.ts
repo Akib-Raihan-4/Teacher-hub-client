@@ -1,5 +1,6 @@
 import { IPaymentRequest, IPaymentResponse } from "@/types/payment";
 import { API_BASE_URL } from "../auth/auth";
+import { fetchWithAuth } from "@/lib/hooks/fetchWithAuth";
 
 export const paymentAPI = {
   createPayment: async (
@@ -7,7 +8,7 @@ export const paymentAPI = {
     payload: IPaymentRequest
   ): Promise<IPaymentResponse> => {
     console.log("payload", payload);
-    const response = await fetch(`${API_BASE_URL}/payment`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/payment`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -23,7 +24,7 @@ export const paymentAPI = {
   },
 
   deletePayment: async (token: string, paymentId: string): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/payment/${paymentId}`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/payment/${paymentId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -41,7 +42,7 @@ export const paymentAPI = {
     paymentId: string,
     payload: IPaymentRequest
   ): Promise<IPaymentResponse> => {
-    const response = await fetch(`${API_BASE_URL}/payment/${paymentId}`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/payment/${paymentId}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,

@@ -82,4 +82,18 @@ export const authAPI = {
 
     return data;
   },
+
+  logOut: async (refreshToken: string) => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/auth/logout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Logout failed");
+    }
+  },
 };

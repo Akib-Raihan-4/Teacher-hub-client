@@ -7,7 +7,7 @@ export const useDeleteIncome = () => {
   const queryClient = useQueryClient();
   return useMutation<void, Error, string>({
     mutationFn: async (incomeId: string) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return financesAPI.deleteIncome(token, incomeId);
     },

@@ -12,7 +12,7 @@ export const useUpdateUnpaidRecord = (studentId: string) => {
     { studentId: string; payload: IUnpaidRecord }
   >({
     mutationFn: async ({ studentId, payload }) => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return studentAPI.updateUnpaidRecord(token, studentId, payload);
     },

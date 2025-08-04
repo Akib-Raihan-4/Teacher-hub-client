@@ -7,12 +7,13 @@ import {
 import { API_BASE_URL } from "../auth/auth";
 import { IStudentPaymentDetails } from "@/types/student";
 import { PaginatedResponse, PaginationParams } from "@/types/pagination";
+import { fetchWithAuth } from "@/lib/hooks/fetchWithAuth";
 
 export const classroomAPI = {
   getAllClassrooms: async (
     token: string
   ): Promise<IClassroomExtendedResponse[]> => {
-    const response = await fetch(`${API_BASE_URL}/classroom`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/classroom`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -32,7 +33,7 @@ export const classroomAPI = {
     token: string,
     payload: IClassroomRequest
   ): Promise<IClassroomExtendedResponse> => {
-    const response = await fetch(`${API_BASE_URL}/classroom`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/classroom`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -52,7 +53,7 @@ export const classroomAPI = {
   getAllClassroomsSummary: async (
     token: string
   ): Promise<IAllClassroomsSummary> => {
-    const response = await fetch(`${API_BASE_URL}/classroom/summary`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/classroom/summary`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -73,7 +74,7 @@ export const classroomAPI = {
     token: string,
     classroomId: string
   ): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/classroom/${classroomId}`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/classroom/${classroomId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -93,7 +94,7 @@ export const classroomAPI = {
     classroomId: string,
     payload: IClassroomRequest
   ): Promise<IClassroomExtendedResponse> => {
-    const response = await fetch(`${API_BASE_URL}/classroom/${classroomId}`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/classroom/${classroomId}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -112,7 +113,7 @@ export const classroomAPI = {
     token: string,
     classroomId: string
   ): Promise<IClassroomWithSummary> => {
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${API_BASE_URL}/classroom/${classroomId}/summary`,
       {
         method: "GET",
@@ -147,7 +148,7 @@ export const classroomAPI = {
       url.searchParams.append("search", search);
     }
 
-    const response = await fetch(url.toString(), {
+    const response = await fetchWithAuth(url.toString(), {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

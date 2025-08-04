@@ -11,7 +11,7 @@ export const useGetIncomes = (
   dateFrom?: string,
   dateTo?: string
 ) => {
-  const { hasValidToken } = useAuth();
+  const { hasValidAccessToken } = useAuth();
   return useQuery<PaginatedResponse<IIncomeWithSource[]>, Error>({
     queryKey: [
       "incomes",
@@ -22,7 +22,7 @@ export const useGetIncomes = (
       dateTo,
     ],
     queryFn: async () => {
-      const token = tokenManager.getToken();
+      const token = tokenManager.getAccessToken();
       if (!token) throw new Error("No token");
       return financesAPI.getTeacherIncome(
         token,
@@ -32,7 +32,7 @@ export const useGetIncomes = (
         dateTo
       );
     },
-    enabled: hasValidToken(),
+    enabled: hasValidAccessToken(),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });
