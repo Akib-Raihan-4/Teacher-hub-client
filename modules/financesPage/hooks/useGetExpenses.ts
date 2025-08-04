@@ -1,6 +1,5 @@
 import { tokenManager } from "@/lib/api/auth/token-manager";
 import { financesAPI } from "@/lib/api/finances/finances";
-import { useAuth } from "@/lib/hooks/useAuth";
 import { IExpenseWithCategory } from "@/types/finances";
 import { PaginatedResponse } from "@/types/pagination";
 import { useQuery } from "@tanstack/react-query";
@@ -11,7 +10,6 @@ export const useGetExpenses = (
   dateFrom?: string,
   dateTo?: string
 ) => {
-  const { hasValidAccessToken } = useAuth();
   return useQuery<PaginatedResponse<IExpenseWithCategory[]>, Error>({
     queryKey: [
       "expenses",
@@ -32,7 +30,6 @@ export const useGetExpenses = (
         dateTo
       );
     },
-    enabled: hasValidAccessToken(),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });

@@ -1,6 +1,5 @@
 import { tokenManager } from "@/lib/api/auth/token-manager";
 import { classroomAPI } from "@/lib/api/classrooms/classrooms";
-import { useAuth } from "@/lib/hooks/useAuth";
 import { PaginatedResponse } from "@/types/pagination";
 import { IStudentPaymentDetails } from "@/types/student";
 import { useQuery } from "@tanstack/react-query";
@@ -10,8 +9,6 @@ export const useGetStudentsByClassroom = (
   paginationParams?: { page?: number; limit?: number },
   search?: string
 ) => {
-  const { hasValidAccessToken } = useAuth();
-
   return useQuery<PaginatedResponse<IStudentPaymentDetails[]>, Error>({
     queryKey: [
       "students",
@@ -30,7 +27,7 @@ export const useGetStudentsByClassroom = (
         search
       );
     },
-    enabled: hasValidAccessToken(),
+
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });

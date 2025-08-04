@@ -108,7 +108,6 @@ export const useAuth = () => {
 
   return {
     user,
-    hasValidAccessToken,
     isAuthenticated: !!user,
     isInitialized,
     login,

@@ -1,6 +1,6 @@
 import { tokenManager } from "@/lib/api/auth/token-manager";
 import { financesAPI } from "@/lib/api/finances/finances";
-import { useAuth } from "@/lib/hooks/useAuth";
+
 import { IIncomeWithSource } from "@/types/finances";
 import { PaginatedResponse } from "@/types/pagination";
 import { useQuery } from "@tanstack/react-query";
@@ -11,7 +11,6 @@ export const useGetIncomes = (
   dateFrom?: string,
   dateTo?: string
 ) => {
-  const { hasValidAccessToken } = useAuth();
   return useQuery<PaginatedResponse<IIncomeWithSource[]>, Error>({
     queryKey: [
       "incomes",
@@ -32,7 +31,7 @@ export const useGetIncomes = (
         dateTo
       );
     },
-    enabled: hasValidAccessToken(),
+
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });
