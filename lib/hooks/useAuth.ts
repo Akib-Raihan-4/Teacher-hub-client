@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import type { User, LoginCredentials, RegisterCredentials } from "@/types/auth";
 import { tokenManager } from "../api/auth/token-manager";
-import { authAPI } from "../api/auth/auth";
+import { API_BASE_URL, authAPI } from "../api/auth/auth";
 import { toast } from "sonner";
 
 export const useAuth = () => {
@@ -106,10 +106,21 @@ export const useAuth = () => {
     queryClient.invalidateQueries({ queryKey: ["user-profile"] });
   };
 
+  const initiateOAuthLogin = async (provider: 'google' | 'github') => {
+    try {
+      window.location.href = `${API_BASE_URL}/auth/${provider}`;
+    } catch (error) {
+      toast.error('OAuth failed', {
+        description: error instanceof Error ? error.message : 'Failed to initiate OAuth login',
+      });
+    }
+  };
+
   return {
     user,
     isAuthenticated: !!user,
     isInitialized,
+    initiateOAuthLogin,
     login,
     register,
     logout,

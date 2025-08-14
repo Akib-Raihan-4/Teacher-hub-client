@@ -96,4 +96,23 @@ export const authAPI = {
       throw new Error("Logout failed");
     }
   },
+
+  getOAuthUrl: async (
+    provider: "google" | "github"
+  ): Promise<{ url: string }> => {
+    const response = await fetch(`${API_BASE_URL}/auth/${provider}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to get OAuth URL");
+    }
+
+    return data;
+  },
 };

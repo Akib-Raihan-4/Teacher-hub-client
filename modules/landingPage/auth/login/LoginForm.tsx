@@ -17,7 +17,7 @@ export default function LoginForm({
 }: {
   switchToRegister: () => void;
 }) {
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, initiateOAuthLogin } = useAuth();
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -149,6 +149,7 @@ export default function LoginForm({
               <Button
                 variant="outline"
                 disabled={isLoading}
+                onClick={() => initiateOAuthLogin("google")}
                 className="hover:bg-accent hover:border-blue-200 dark:hover:border-yellow-500/30 transition-colors bg-transparent disabled:opacity-50"
               >
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
